@@ -13,11 +13,6 @@ public class MainActivity extends Activity {
     private static int GET_BARCODE_REQUEST = 1;
     private TextView barcodeText;
 
-    static {
-        System.loadLibrary("iconv");
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
