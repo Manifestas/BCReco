@@ -15,7 +15,7 @@ import net.sourceforge.zbar.SymbolSet;
 
 public class CameraActivity extends Activity {
 
-    private static final String EXTRA_BCVALUE = "bcValue";
+    public static final String EXTRA_BCVALUE = "bcValue";
     private ImageScanner scanner;
     private Camera camera;
     private CameraPreview cameraPreview;
