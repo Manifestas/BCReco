@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+    private static int GET_BARCODE_REQUEST = 1;
     private TextView barcodeText;
 
     static {
@@ -28,7 +29,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, GET_BARCODE_REQUEST);
             }
         });
     }
@@ -38,7 +39,14 @@ public class MainActivity extends Activity {
         if (data == null) {
             return;
         }
-        String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
-        barcodeText.setText(barcodeString);
+        // Check which request we're responding to
+        if (requestCode == GET_BARCODE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // Get barcode from intent
+                String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
+                barcodeText.setText(barcodeString);
+            }
+        }
     }
 }
