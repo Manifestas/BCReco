@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BC Reco</string>
+    <string name="barcode">Barcode</string>
 </resources>
