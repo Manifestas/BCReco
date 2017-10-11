@@ -80,6 +80,7 @@ public class CameraActivity extends Activity {
         return c;
     }
 
+    // Send to the scanner every new frame from camera preview
     Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
         @Override
         public void onPreviewFrame(byte[] bytes, Camera camera) {
@@ -88,6 +89,7 @@ public class CameraActivity extends Activity {
             if (result != 0) {
                 SymbolSet symbols = scanner.getResults();
                 for (Symbol sym : symbols) {
+                    //get recognized code
                     lastScannedCode = sym.getData();
                     if (lastScannedCode != null) {
                         isBarcodeScanned = true;
