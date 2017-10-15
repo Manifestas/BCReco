@@ -2,10 +2,20 @@ package com.example.manifest.bcreco;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.manifest.bcreco.data.DbContract;
+import com.example.manifest.bcreco.data.Goods;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class MainActivity extends Activity {
@@ -42,6 +52,69 @@ public class MainActivity extends Activity {
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
                 barcodeText.setText(barcodeString);
             }
+        }
+    }
+    private class GoodsDBAsyncTask extends AsyncTask<String, Void, Goods> {
+
+        @Override
+        protected Goods doInBackground(String... strings) {
+            // Don't perform the request if there are no URLs, or the first URL is null
+            if (strings.length < 1 || strings[0] == null) {
+                return null;
+            }
+            Goods goods = null;
+            try {
+                // The newInstance() call is a work around for some broken Java implementations
+                //this creates some static objects that we need.
+                Class.forName("net.sourceforge.jtds.jdbc.Driver");
+                Connection connection = null;
+                Statement statement = null;
+                ResultSet resultSet = null;
+                try {
+                    connection = DriverManager.getConnection(DbContract.DB_NAME,
+                            DbContract.DB_LOGIN, DbContract.DB_PASSWORD);
+                    if (connection != null) {
+                        statement = connection.createStatement();
+                        resultSet = statement.executeQuery(
+                                "SELECT " + DbContract.PluEntry.COLUMN_ID_MODEL + ", "
+                                        + DbContract.PluEntry.COLUMN_COLOR + ", "
+                                        + DbContract.PluEntry.COLUMN_ID_SIZE
+                                        + " FROM " + DbContract.PluEntry.TABLE_NAME
+                                        + " WHERE " + DbContract.PluEntry.COLUMN_ID + " = "
+                                        + "(SELECT " + DbContract.BarcodeEntry.COLUMN_ID_PLU
+                                        + " FROM " + DbContract.BarcodeEntry.TABLE_NAME
+                                        + " WHERE " + DbContract.BarcodeEntry.COLUMN_BARCODE
+                                        + " = '" + strings[0] + "');");
+                        if (resultSet != null) {
+                            resultSet.next();
+                            int idModel = resultSet.getInt(DbContract.PluEntry.COLUMN_ID_MODEL);
+                            int color = resultSet.getInt(DbContract.PluEntry.COLUMN_COLOR);
+                            int size = resultSet.getInt(DbContract.PluEntry.COLUMN_ID_SIZE);
+                            //TODO: change with real value.
+                            goods = new Goods(strings[0], String.valueOf(idModel),
+                                    String.valueOf(color), String.valueOf(size));
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (resultSet != null) resultSet.close();
+                        if (statement != null) statement.close();
+                        if (connection != null) connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return goods;
+        }
+
+        @Override
+        protected void onPostExecute(Goods goods) {
+            super.onPostExecute(goods);
         }
     }
 }
