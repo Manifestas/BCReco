@@ -27,4 +27,5 @@ dependencies {
     compile files('src/libs/iconv.jar')
     testCompile 'junit:junit:4.12'
     compile files('src/libs/zbar.jar')
+    compile files('src/libs/jtds-1.2.8.jar')
 }
