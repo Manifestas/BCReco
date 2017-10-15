@@ -1,11 +1,26 @@
 package com.example.manifest.bcreco.data;
 
 import android.provider.BaseColumns;
-import android.text.TextUtils;
 
 public final class DbContract {
 
     private DbContract(){}
+
+    /**
+     * Database name.
+     */
+    public static final String DB_NAME = "TradeX";
+
+    //TODO: move this to the SharedPreference and ask a user to enter log/pass in settings menu
+    /**
+     * User login.
+     */
+    public static final String DB_LOGIN = "tv";
+
+    /**
+     * User password.
+     */
+    public static final String DB_PASSWORD = "12345678";
 
     /**
      * Inner class that defines constant values for the barcode database table.
