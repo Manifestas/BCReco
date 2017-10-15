@@ -22,6 +22,16 @@ public final class DbContract {
      */
     public static final String DB_PASSWORD = "12345678";
 
+    public static final String DB_IP_ADDRESS = "192.168.14.2:1433";
+    /**
+     * Connection url.
+     */
+    public static final String DB_CONN_URL = "jdbc:jtds:sqlserver://"
+                                             + DB_IP_ADDRESS + ";"
+                                             + "databaseName=" + DB_NAME
+                                             + ";user=" + DB_LOGIN
+                                             + ";password=" + DB_PASSWORD + ";";
+
     /**
      * Inner class that defines constant values for the barcode database table.
      */

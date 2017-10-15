@@ -79,8 +79,7 @@ public class MainActivity extends Activity {
                 Statement statement = null;
                 ResultSet resultSet = null;
                 try {
-                    connection = DriverManager.getConnection(DbContract.DB_NAME,
-                            DbContract.DB_LOGIN, DbContract.DB_PASSWORD);
+                    connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
                         statement = connection.createStatement();
                         resultSet = statement.executeQuery(
@@ -92,7 +91,7 @@ public class MainActivity extends Activity {
                                         + "(SELECT " + DbContract.BarcodeEntry.COLUMN_ID_PLU
                                         + " FROM " + DbContract.BarcodeEntry.TABLE_NAME
                                         + " WHERE " + DbContract.BarcodeEntry.COLUMN_BARCODE
-                                        + " = '" + strings[0] + "');");
+                                        + " = '" + DbContract.BarcodeEntry.getValidBarcode(strings[0]) + "');");
                         if (resultSet != null) {
                             resultSet.next();
                             int idModel = resultSet.getInt(DbContract.PluEntry.COLUMN_ID_MODEL);
@@ -122,9 +121,11 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(Goods goods) {
-            modelText.setText(goods.getModel());
-            colorText.setText(goods.getColor());
-            sizeText.setText(goods.getSize());
+            if (goods != null) {
+                modelText.setText(goods.getModel());
+                colorText.setText(goods.getColor());
+                sizeText.setText(goods.getSize());
+            }
         }
     }
 }
