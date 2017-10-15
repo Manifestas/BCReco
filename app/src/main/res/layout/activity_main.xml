@@ -22,4 +22,25 @@
         android:id="@+id/barcode_text"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        tools:text="40076"
+        android:layout_gravity="center"
+        android:id="@+id/model_text"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        tools:text="12292"
+        android:layout_gravity="center"
+        android:id="@+id/color_text"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        tools:text="12"
+        android:layout_gravity="center"
+        android:id="@+id/size_text"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
