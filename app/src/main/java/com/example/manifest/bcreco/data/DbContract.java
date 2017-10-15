@@ -38,7 +38,7 @@ public final class DbContract {
          * @return String barcode with length equal to 12.
          */
         public static String getValidBarcode(String barcode) {
-            if (TextUtils.isEmpty(barcode)) {
+            if (barcode == null || barcode.length() == 0) {
                 return null;
             }
             int barcodeLength = barcode.length();
