@@ -22,6 +22,9 @@ public class MainActivity extends Activity {
 
     private static int GET_BARCODE_REQUEST = 1;
     private TextView barcodeText;
+    private TextView modelText;
+    private TextView colorText;
+    private TextView sizeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         barcodeText = (TextView) findViewById(R.id.barcode_text);
+        modelText = (TextView) findViewById(R.id.model_text);
+        colorText = (TextView) findViewById(R.id.color_text);
+        sizeText = (TextView) findViewById(R.id.size_text);
+
         Button barcodeBtn = (Button) findViewById(R.id.barcode_btn);
         barcodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +58,7 @@ public class MainActivity extends Activity {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
                 barcodeText.setText(barcodeString);
+                new GoodsDBAsyncTask().execute(barcodeString);
             }
         }
     }
@@ -114,7 +122,9 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(Goods goods) {
-            super.onPostExecute(goods);
+            modelText.setText(goods.getModel());
+            colorText.setText(goods.getColor());
+            sizeText.setText(goods.getSize());
         }
     }
 }

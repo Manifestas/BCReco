@@ -2,6 +2,7 @@ package com.example.manifest.bcreco.data;
 
 public class Goods {
 
+
     private String barcode;
     private String model;
     private String color;
@@ -12,5 +13,21 @@ public class Goods {
         this.model = model;
         this.color = color;
         this.size = size;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getSize() {
+        return size;
     }
 }
