@@ -75,6 +75,19 @@ public final class DbContract {
                 return String.format("%0" + (12 - barcodeLength) + "d%s", 0, barcode);
             }
         }
+
+        public static String queryModelColorSizeFromBarcodeTable(String barcode) {
+            return "SELECT "
+                        + PluEntry.COLUMN_ID_MODEL + ", "
+                        + PluEntry.COLUMN_COLOR + ", "
+                        + PluEntry.COLUMN_ID_SIZE
+                    + " FROM " + PluEntry.TABLE_NAME
+                    + " WHERE " + PluEntry.COLUMN_ID + " = "
+                    + "(SELECT " + BarcodeEntry.COLUMN_ID_PLU
+                    + " FROM " + BarcodeEntry.TABLE_NAME
+                    + " WHERE " + BarcodeEntry.COLUMN_BARCODE
+                    + " = '" + getValidBarcode(barcode) + "');";
+        }
     }
 
     /**

@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.manifest.bcreco.data.DbContract;
+import com.example.manifest.bcreco.data.DbContract.BarcodeEntry;
+import com.example.manifest.bcreco.data.DbContract.PluEntry;
 import com.example.manifest.bcreco.data.Goods;
 
 import java.sql.Connection;
@@ -62,6 +64,7 @@ public class MainActivity extends Activity {
             }
         }
     }
+
     private class GoodsDBAsyncTask extends AsyncTask<String, Void, Goods> {
 
         @Override
@@ -82,16 +85,9 @@ public class MainActivity extends Activity {
                     connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
                         statement = connection.createStatement();
-                        resultSet = statement.executeQuery(
-                                "SELECT " + DbContract.PluEntry.COLUMN_ID_MODEL + ", "
-                                        + DbContract.PluEntry.COLUMN_COLOR + ", "
-                                        + DbContract.PluEntry.COLUMN_ID_SIZE
-                                        + " FROM " + DbContract.PluEntry.TABLE_NAME
-                                        + " WHERE " + DbContract.PluEntry.COLUMN_ID + " = "
-                                        + "(SELECT " + DbContract.BarcodeEntry.COLUMN_ID_PLU
-                                        + " FROM " + DbContract.BarcodeEntry.TABLE_NAME
-                                        + " WHERE " + DbContract.BarcodeEntry.COLUMN_BARCODE
-                                        + " = '" + DbContract.BarcodeEntry.getValidBarcode(strings[0]) + "');");
+                        // get ID_MODEL, ID_ColorVend, ID_Sizes from T_PLU tabel
+                        String query = BarcodeEntry.queryModelColorSizeFromBarcodeTable(strings[0]);
+                        resultSet = statement.executeQuery(query);
                         if (resultSet != null) {
                             resultSet.next();
                             int idModel = resultSet.getInt(DbContract.PluEntry.COLUMN_ID_MODEL);
