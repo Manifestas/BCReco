@@ -76,18 +76,6 @@ public final class DbContract {
             }
         }
 
-        public static String queryModelColorSizeFromBarcodeTable(String barcode) {
-            return "SELECT "
-                        + PluEntry.COLUMN_ID_MODEL + ", "
-                        + PluEntry.COLUMN_COLOR + ", "
-                        + PluEntry.COLUMN_ID_SIZE
-                    + " FROM " + PluEntry.TABLE_NAME
-                    + " WHERE " + PluEntry.COLUMN_ID + " = "
-                    + "(SELECT " + BarcodeEntry.COLUMN_ID_PLU
-                    + " FROM " + BarcodeEntry.TABLE_NAME
-                    + " WHERE " + BarcodeEntry.COLUMN_BARCODE
-                    + " = '" + getValidBarcode(barcode) + "');";
-        }
     }
 
     /**
@@ -132,6 +120,24 @@ public final class DbContract {
          * Type: MONEY
          */
         public static final String COLUMN_CURRENT_PRICE = "RecomRetailPrice";
+
+        /**
+         * Query String generation from ID_PLU table.
+         * @param barcode scanned barcode
+         * @return formatted query String
+         */
+        public static String queryModelColorSizeFromIDPluTable(String barcode) {
+            return "SELECT "
+                    + PluEntry.COLUMN_ID_MODEL + ", "
+                    + PluEntry.COLUMN_COLOR + ", "
+                    + PluEntry.COLUMN_ID_SIZE
+                    + " FROM " + PluEntry.TABLE_NAME
+                    + " WHERE " + PluEntry.COLUMN_ID + " = "
+                    + "(SELECT " + BarcodeEntry.COLUMN_ID_PLU
+                    + " FROM " + BarcodeEntry.TABLE_NAME
+                    + " WHERE " + BarcodeEntry.COLUMN_BARCODE
+                    + " = '" + BarcodeEntry.getValidBarcode(barcode) + "');";
+        }
     }
 
     /**

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.manifest.bcreco.data.DbContract;
-import com.example.manifest.bcreco.data.DbContract.BarcodeEntry;
 import com.example.manifest.bcreco.data.DbContract.PluEntry;
 import com.example.manifest.bcreco.data.Goods;
 
@@ -85,8 +84,8 @@ public class MainActivity extends Activity {
                     connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
                         statement = connection.createStatement();
-                        // get ID_MODEL, ID_ColorVend, ID_Sizes from T_PLU tabel
-                        String query = BarcodeEntry.queryModelColorSizeFromBarcodeTable(strings[0]);
+                        // get ID_MODEL, ID_ColorVend, ID_Sizes from T_PLU table
+                        String query = PluEntry.queryModelColorSizeFromIDPluTable(strings[0]);
                         resultSet = statement.executeQuery(query);
                         if (resultSet != null) {
                             resultSet.next();
