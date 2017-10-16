@@ -54,7 +54,7 @@ public final class DbContract {
          */
         public static final String COLUMN_ID_PLU = "ID_PLU";
 
-        //TODO: test.
+        //TODO: add check sum.
         /**
          * For fast searching in database, it is necessary that the length
          * of the barcode string must be 12.
@@ -120,22 +120,6 @@ public final class DbContract {
          * Type: MONEY
          */
         public static final String COLUMN_CURRENT_PRICE = "RecomRetailPrice";
-
-        /**
-         * Query String generation from ID_PLU table that receives ID_Model,
-         * ID_Sizes, ID_Color.
-         * @param barcode scanned barcode
-         * @return formatted query String
-         */
-        public static String queryModelColorSizeFromIDPluTable(String barcode) {
-            return "SELECT " + COLUMN_ID_MODEL + ", " + COLUMN_COLOR + ", " + COLUMN_ID_SIZE
-                    + " FROM " + TABLE_NAME
-                    + " WHERE " + COLUMN_ID + " = "
-                    + "(SELECT " + BarcodeEntry.COLUMN_ID_PLU
-                    + " FROM " + BarcodeEntry.TABLE_NAME
-                    + " WHERE " + BarcodeEntry.COLUMN_BARCODE
-                    + " = '" + BarcodeEntry.getValidBarcode(barcode) + "');";
-        }
     }
 
     /**
@@ -168,17 +152,20 @@ public final class DbContract {
         public static final String COLUMN_MODEL_DESC = "ModelDesc";
 
         /**
-         * Query String generation, that receives model name and model description
-         * from T_Models table.
-         * @param modelId that we get from T_PLU table.
-         * @return formatted query String
+         * ID currency of price(e.g. 3 - euro).
+         *
+         * Type: INT
          */
-        public static String queryModelModelDescFromTModelsTable(int modelId) {
-            return "SELECT " + COLUMN_MODEL + ", " + COLUMN_MODEL_DESC
-                    + " FROM " + TABLE_NAME
-                    + " WHERE " + COLUMN_ID + " = " + String.valueOf(modelId) + ";";
-        }
+        public static final String COLUMN_CURRENCY_ID = "ExpCurrency";
+
+        /**
+         * ID of season.
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_SEASON_ID = "Season";
     }
+
     /**
      * Inner class that defines constant values for the colors database table.
      */
@@ -192,7 +179,7 @@ public final class DbContract {
          *
          * Type: INT
          */
-        public static final String COLUMN_ID_COLOR = "ID_ColorVend";
+        public static final String COLUMN_COLOR_ID = "ID_ColorVend";
 
         /**
          * Color name(e.g. blue).
@@ -200,16 +187,56 @@ public final class DbContract {
          * Type: VARCHAR
          */
         public static final String COLUMN_COLOR = "Color";
+    }
+
+    /**
+     * Inner class that defines constant values for the Season database table.
+     */
+    public static final class SeasonEntry implements BaseColumns {
 
         /**
-         * Query String generation, that receives color name from T_ColorVend table.
-         * @param colorId that we get from T_PLU table.
-         * @return formatted query String
+         * Name of database table for Seasons
          */
-        public static String queryColorFromTColorVendTable(int colorId) {
-            return "SELECT " + COLUMN_COLOR
-                    + " FROM " + TABLE_NAME
-                    + " WHERE " + COLUMN_ID_COLOR + " = " + String.valueOf(colorId) + ";";
-        }
+        public static final String TABLE_NAME = "T_Season";
+
+        /**
+         * ID of season.
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_SEASON_ID = "ID";
+
+        /**
+         * Season name(e.g. winter2017-18).
+         *
+         * Type: VARCHAR
+         */
+        public static final String COLUMN_SEASON = "RefDesc";
+    }
+
+    /**
+     * Inner class that defines constant values for the Exchange database table.
+     */
+    public static final class ExchangeEntry implements BaseColumns {
+
+        /**
+         * Name of database table for Exchange
+         */
+        public static final String TABLE_NAME = "T_Exchange";
+
+        /**
+         * ID of currency.
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_CURRENCY_ID = "ID_Currency";
+
+        //TODO: check type.
+        /**
+         * Exchange rate(e.g. 75 in the moment).
+         *
+         * Type:
+         */
+        public static final String COLUMN_EXCHANGE_RATE = "ExchangeRate";
     }
 }
