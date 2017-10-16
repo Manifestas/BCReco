@@ -122,17 +122,15 @@ public final class DbContract {
         public static final String COLUMN_CURRENT_PRICE = "RecomRetailPrice";
 
         /**
-         * Query String generation from ID_PLU table.
+         * Query String generation from ID_PLU table that receives ID_Model,
+         * ID_Sizes, ID_Color.
          * @param barcode scanned barcode
          * @return formatted query String
          */
         public static String queryModelColorSizeFromIDPluTable(String barcode) {
-            return "SELECT "
-                    + PluEntry.COLUMN_ID_MODEL + ", "
-                    + PluEntry.COLUMN_COLOR + ", "
-                    + PluEntry.COLUMN_ID_SIZE
-                    + " FROM " + PluEntry.TABLE_NAME
-                    + " WHERE " + PluEntry.COLUMN_ID + " = "
+            return "SELECT " + COLUMN_ID_MODEL + ", " + COLUMN_COLOR + ", " + COLUMN_ID_SIZE
+                    + " FROM " + TABLE_NAME
+                    + " WHERE " + COLUMN_ID + " = "
                     + "(SELECT " + BarcodeEntry.COLUMN_ID_PLU
                     + " FROM " + BarcodeEntry.TABLE_NAME
                     + " WHERE " + BarcodeEntry.COLUMN_BARCODE
@@ -169,6 +167,17 @@ public final class DbContract {
          */
         public static final String COLUMN_MODEL_DESC = "ModelDesc";
 
+        /**
+         * Query String generation, that receives model name and model description
+         * from T_Models table.
+         * @param modelId that we get from T_PLU table.
+         * @return formatted query String
+         */
+        public String queryModelModelDescFromTModelsTable(int modelId) {
+            return "SELECT " + COLUMN_MODEL + ", " + COLUMN_MODEL_DESC
+                    + " FROM " + TABLE_NAME
+                    + " WHERE " + COLUMN_ID + " = " + String.valueOf(modelId) + ";";
+        }
     }
     /**
      * Inner class that defines constant values for the colors database table.
@@ -191,5 +200,16 @@ public final class DbContract {
          * Type: VARCHAR
          */
         public static final String COLUMN_COLOR = "Color";
+
+        /**
+         * Query String generation, that receives color name from T_ColorVend table.
+         * @param colorId that we get from T_PLU table.
+         * @return formatted query String
+         */
+        public String queryColorFromTColorVendTable(int colorId) {
+            return "SELECT " + COLUMN_COLOR
+                    + " FROM " + TABLE_NAME
+                    + " WHERE " + COLUMN_ID_COLOR + " = " + String.valueOf(colorId) + ";";
+        }
     }
 }
