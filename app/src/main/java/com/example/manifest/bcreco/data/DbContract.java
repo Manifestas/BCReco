@@ -173,7 +173,7 @@ public final class DbContract {
          * @param modelId that we get from T_PLU table.
          * @return formatted query String
          */
-        public String queryModelModelDescFromTModelsTable(int modelId) {
+        public static String queryModelModelDescFromTModelsTable(int modelId) {
             return "SELECT " + COLUMN_MODEL + ", " + COLUMN_MODEL_DESC
                     + " FROM " + TABLE_NAME
                     + " WHERE " + COLUMN_ID + " = " + String.valueOf(modelId) + ";";
@@ -206,7 +206,7 @@ public final class DbContract {
          * @param colorId that we get from T_PLU table.
          * @return formatted query String
          */
-        public String queryColorFromTColorVendTable(int colorId) {
+        public static String queryColorFromTColorVendTable(int colorId) {
             return "SELECT " + COLUMN_COLOR
                     + " FROM " + TABLE_NAME
                     + " WHERE " + COLUMN_ID_COLOR + " = " + String.valueOf(colorId) + ";";

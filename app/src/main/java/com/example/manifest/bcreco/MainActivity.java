@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.manifest.bcreco.data.DbContract;
 import com.example.manifest.bcreco.data.DbContract.PluEntry;
+import com.example.manifest.bcreco.data.DbContract.ModelEntry;
+import com.example.manifest.bcreco.data.DbContract.ColorEntry;
 import com.example.manifest.bcreco.data.Goods;
 
 import java.sql.Connection;
@@ -25,7 +27,7 @@ public class MainActivity extends Activity {
     private TextView barcodeText;
     private TextView modelText;
     private TextView colorText;
-    private TextView sizeText;
+    private TextView modelDescText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class MainActivity extends Activity {
         barcodeText = (TextView) findViewById(R.id.barcode_text);
         modelText = (TextView) findViewById(R.id.model_text);
         colorText = (TextView) findViewById(R.id.color_text);
-        sizeText = (TextView) findViewById(R.id.size_text);
+        modelDescText = (TextView) findViewById(R.id.model_desc_text);
 
         Button barcodeBtn = (Button) findViewById(R.id.barcode_btn);
         barcodeBtn.setOnClickListener(new View.OnClickListener() {
@@ -89,12 +91,24 @@ public class MainActivity extends Activity {
                         resultSet = statement.executeQuery(query);
                         if (resultSet != null) {
                             resultSet.next();
-                            int idModel = resultSet.getInt(DbContract.PluEntry.COLUMN_ID_MODEL);
-                            int color = resultSet.getInt(DbContract.PluEntry.COLUMN_COLOR);
-                            int size = resultSet.getInt(DbContract.PluEntry.COLUMN_ID_SIZE);
+                            int modelId = resultSet.getInt(PluEntry.COLUMN_ID_MODEL);
+                            int colorId = resultSet.getInt(PluEntry.COLUMN_COLOR);
+                            int sizeId = resultSet.getInt(PluEntry.COLUMN_ID_SIZE);
                             //TODO: change with real value.
-                            goods = new Goods(strings[0], String.valueOf(idModel),
-                                    String.valueOf(color), String.valueOf(size));
+                            //get MODEL, MODEL_DESC from T_Model table
+                            query = ModelEntry.queryModelModelDescFromTModelsTable(modelId);
+                            resultSet = statement.executeQuery(query);
+                            resultSet.next();
+                            String modelName = resultSet.getString(ModelEntry.COLUMN_MODEL);
+                            String modelDesc = resultSet.getString(ModelEntry.COLUMN_MODEL_DESC);
+                            //get COLOR from T_ColorVend table
+                            query = ColorEntry.queryColorFromTColorVendTable(colorId);
+                            resultSet = statement.executeQuery(query);
+                            resultSet.next();
+                            String colorName = resultSet.getString(ColorEntry.COLUMN_COLOR);
+
+                            //
+                            goods = new Goods(strings[0], modelName, colorName, modelDesc);
                         }
                     }
                 } catch (SQLException e) {
@@ -119,7 +133,7 @@ public class MainActivity extends Activity {
             if (goods != null) {
                 modelText.setText(goods.getModel());
                 colorText.setText(goods.getColor());
-                sizeText.setText(goods.getSize());
+                modelDescText.setText(goods.getModelDesc());
             }
         }
     }
