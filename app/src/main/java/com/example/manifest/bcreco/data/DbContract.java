@@ -32,6 +32,54 @@ public final class DbContract {
                                              + ";user=" + DB_LOGIN
                                              + ";password=" + DB_PASSWORD + ";";
 
+    /** SQL statement. */
+    public static final String INNER_JOIN = "INNER JOIN";
+    /** SQL keyword. */
+    public static final String ON = " ON ";
+    /** A dot for sql command. */
+    public static final String DOT = ".";
+    /** A comma separator. */
+    public static final String COMMA = ", ";
+    /** A equal symbol. */
+    public static final String EQUALS = " = ";
+
+    /** Query from TradeX table for getting Goods parameters.
+     * Currency price, model name, model desc, size name,
+     * color name, season name, current exchange rate.
+     */
+    public static String  goodsQuery(String barcode) {
+        return "SELECT "
+                + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_CURRENT_PRICE + COMMA
+                + ModelEntry.TABLE_NAME + DOT + ModelEntry.COLUMN_MODEL + COMMA
+                + ModelEntry.TABLE_NAME + DOT + ModelEntry.COLUMN_MODEL_DESC + COMMA
+                + SizeEntry.TABLE_NAME + DOT + SizeEntry.COLUMN_SIZE_NAME + COMMA
+                + ColorEntry.TABLE_NAME + DOT + ColorEntry.COLUMN_COLOR + COMMA
+                + SeasonEntry.TABLE_NAME + DOT + SeasonEntry.COLUMN_SEASON + COMMA
+                + ExchangeEntry.TABLE_NAME + DOT + ExchangeEntry.COLUMN_EXCHANGE_RATE + COMMA
+            + "FROM " + BarcodeEntry.TABLE_NAME
+                + INNER_JOIN + " " + PluEntry.TABLE_NAME
+                + ON + BarcodeEntry.TABLE_NAME + DOT + BarcodeEntry.COLUMN_ID_PLU
+                + EQUALS + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_ID
+                + INNER_JOIN + " " + ModelEntry.TABLE_NAME
+                + ON + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_ID_MODEL
+                + EQUALS + ModelEntry.TABLE_NAME + DOT + ModelEntry.COLUMN_ID
+                + INNER_JOIN + " " + SizeEntry.TABLE_NAME
+                + ON + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_ID_SIZE
+                + EQUALS + SizeEntry.TABLE_NAME + DOT + SizeEntry.COLUMN_SIZE_ID
+                + INNER_JOIN + " " + ColorEntry.TABLE_NAME
+                + ON + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_COLOR
+                + EQUALS + ColorEntry.TABLE_NAME + DOT + ColorEntry.COLUMN_COLOR_ID
+                + INNER_JOIN + " " + SeasonEntry.TABLE_NAME
+                + ON + ModelEntry.TABLE_NAME + DOT + ModelEntry.COLUMN_SEASON_ID
+                + EQUALS + SeasonEntry.TABLE_NAME + DOT + SeasonEntry.COLUMN_SEASON_ID
+                + INNER_JOIN + " " + ExchangeEntry.TABLE_NAME
+                + ON + ModelEntry.TABLE_NAME + DOT + ModelEntry.COLUMN_CURRENCY_ID
+                + EQUALS + ExchangeEntry.TABLE_NAME + DOT + ExchangeEntry.COLUMN_CURRENCY_ID
+            + "WHERE " + BarcodeEntry.TABLE_NAME + DOT +  BarcodeEntry.COLUMN_BARCODE
+                + EQUALS + barcode + ";";
+    }
+
+
     /**
      * Inner class that defines constant values for the barcode database table.
      */
@@ -238,5 +286,31 @@ public final class DbContract {
          * Type:
          */
         public static final String COLUMN_EXCHANGE_RATE = "ExchangeRate";
+    }
+
+    /**
+     * Inner class that defines constant values for the Sizes database table.
+     */
+    public static final class SizeEntry implements BaseColumns {
+
+        /**
+         * Name of database table for Sizes.
+         */
+        public static final String TABLE_NAME = "T_Sizes";
+
+        /**
+         * ID of size(e.g. 12).
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_SIZE_ID = "ID";
+
+        //TODO: check type
+        /**
+         * Size name(e.g. 39)
+         *
+         * Type:
+         */
+        public static final String COLUMN_SIZE_NAME = "SizeName";
     }
 }
