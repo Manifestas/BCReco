@@ -94,20 +94,6 @@ public class MainActivity extends Activity {
                             int modelId = resultSet.getInt(PluEntry.COLUMN_ID_MODEL);
                             int colorId = resultSet.getInt(PluEntry.COLUMN_COLOR);
                             int sizeId = resultSet.getInt(PluEntry.COLUMN_ID_SIZE);
-                            //TODO: change with real value.
-                            //get MODEL, MODEL_DESC from T_Model table
-                            query = ModelEntry.queryModelModelDescFromTModelsTable(modelId);
-                            resultSet = statement.executeQuery(query);
-                            resultSet.next();
-                            String modelName = resultSet.getString(ModelEntry.COLUMN_MODEL);
-                            String modelDesc = resultSet.getString(ModelEntry.COLUMN_MODEL_DESC);
-                            //get COLOR from T_ColorVend table
-                            query = ColorEntry.queryColorFromTColorVendTable(colorId);
-                            resultSet = statement.executeQuery(query);
-                            resultSet.next();
-                            String colorName = resultSet.getString(ColorEntry.COLUMN_COLOR);
-
-                            //
                             goods = new Goods(strings[0], modelName, colorName, modelDesc);
                         }
                     }
