@@ -2,8 +2,6 @@ package com.example.manifest.bcreco.data;
 
 public class Goods {
 
-
-    private String barcode;
     private String model;
     private String color;
     private String modelDesc;

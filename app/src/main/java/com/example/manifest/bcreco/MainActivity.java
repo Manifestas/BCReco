@@ -12,6 +12,7 @@ import com.example.manifest.bcreco.data.DbContract;
 import com.example.manifest.bcreco.data.DbContract.PluEntry;
 import com.example.manifest.bcreco.data.DbContract.ModelEntry;
 import com.example.manifest.bcreco.data.DbContract.ColorEntry;
+import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
 import com.example.manifest.bcreco.data.Goods;
 
 import java.sql.Connection;
@@ -24,20 +25,25 @@ import java.sql.Statement;
 public class MainActivity extends Activity {
 
     private static int GET_BARCODE_REQUEST = 1;
-    private TextView barcodeText;
-    private TextView modelText;
-    private TextView colorText;
-    private TextView modelDescText;
+
+    private TextView modelTextView;
+    private TextView colorTextView;
+    private TextView modelDescTextView;
+    private TextView seasonTextView;
+    private TextView sizeTextView;
+    private TextView priceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        barcodeText = (TextView) findViewById(R.id.barcode_text);
-        modelText = (TextView) findViewById(R.id.model_text);
-        colorText = (TextView) findViewById(R.id.color_text);
-        modelDescText = (TextView) findViewById(R.id.model_desc_text);
+        modelTextView = (TextView) findViewById(R.id.tv_model);
+        colorTextView = (TextView) findViewById(R.id.tv_color);
+        modelDescTextView = (TextView) findViewById(R.id.tv_model_desc);
+        seasonTextView = (TextView) findViewById(R.id.tv_season);
+        sizeTextView = (TextView) findViewById(R.id.tv_size);
+        priceTextView = (TextView) findViewById(R.id.tv_price);
 
         Button barcodeBtn = (Button) findViewById(R.id.barcode_btn);
         barcodeBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +66,6 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
-                barcodeText.setText(barcodeString);
                 new GoodsDBAsyncTask().execute(barcodeString);
             }
         }
@@ -86,15 +91,23 @@ public class MainActivity extends Activity {
                     connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
                         statement = connection.createStatement();
-                        // get ID_MODEL, ID_ColorVend, ID_Sizes from T_PLU table
-                        String query = PluEntry.queryModelColorSizeFromIDPluTable(strings[0]);
-                        resultSet = statement.executeQuery(query);
+                        resultSet = statement.executeQuery(DbContract.goodsQuery(strings[0]));
                         if (resultSet != null) {
                             resultSet.next();
-                            int modelId = resultSet.getInt(PluEntry.COLUMN_ID_MODEL);
-                            int colorId = resultSet.getInt(PluEntry.COLUMN_COLOR);
+
+                            String model = resultSet.getString(ModelEntry.COLUMN_MODEL);
+                            String color = resultSet.getString(ColorEntry.COLUMN_COLOR);
+                            String modelDesc = resultSet.getString(ModelEntry.COLUMN_MODEL_DESC);
+                            String season = resultSet.getString(SeasonEntry.COLUMN_SEASON);
+
+                            //TODO: complete after check types
+
+
                             int sizeId = resultSet.getInt(PluEntry.COLUMN_ID_SIZE);
                             goods = new Goods(strings[0], modelName, colorName, modelDesc);
+                            + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_CURRENT_PRICE + COMMA
+                                    + SizeEntry.TABLE_NAME + DOT + SizeEntry.COLUMN_SIZE_NAME + COMMA
+                                    + ExchangeEntry.TABLE_NAME + DOT + ExchangeEntry.COLUMN_EXCHANGE_RATE + COMMA
                         }
                     }
                 } catch (SQLException e) {
@@ -117,9 +130,12 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Goods goods) {
             if (goods != null) {
-                modelText.setText(goods.getModel());
-                colorText.setText(goods.getColor());
-                modelDescText.setText(goods.getModelDesc());
+                modelTextView.setText(goods.getModel());
+                colorTextView.setText(goods.getColor());
+                modelDescTextView.setText(goods.getModelDesc());
+                seasonTextView.setText(goods.getSeason());
+                sizeTextView.setText(goods.getSize());
+                priceTextView.setText(goods.getPrice());
             }
         }
     }
