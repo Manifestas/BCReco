@@ -11,19 +11,14 @@ public class Goods {
     private int price;
     private int size;
 
-    public Goods(String barcode, String model, String color, String modelDesc, String season,
+    public Goods(String model, String color, String modelDesc, String season,
                  int price, int size) {
-        this.barcode = barcode;
         this.model = model;
         this.color = color;
         this.modelDesc = modelDesc;
         this.season = season;
         this.price = price;
         this.size = size;
-    }
-
-    public String getBarcode() {
-        return barcode;
     }
 
     public String getModel() {
