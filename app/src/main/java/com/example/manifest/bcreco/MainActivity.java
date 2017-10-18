@@ -26,6 +26,9 @@ import java.sql.Statement;
 
 public class MainActivity extends Activity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+    //this code will be returned in onActivityResult() when the activity exits.
+    //By it we determine from which Activity came the result
     private static int GET_BARCODE_REQUEST = 1;
 
     private TextView modelTextView;
@@ -76,9 +79,9 @@ public class MainActivity extends Activity {
     private class GoodsDBAsyncTask extends AsyncTask<String, Void, Goods> {
 
         @Override
-        protected Goods doInBackground(String... strings) {
-            // Don't perform the request if there are no URLs, or the first URL is null
-            if (strings.length < 1 || strings[0] == null) {
+        protected Goods doInBackground(String... barcodes) {
+            // Don't perform the request if there are no barcodes, or the first barcode is null
+            if (barcodes.length < 1 || barcodes[0] == null) {
                 return null;
             }
             Goods goods = null;
@@ -93,7 +96,7 @@ public class MainActivity extends Activity {
                     connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
                         statement = connection.createStatement();
-                        rs = statement.executeQuery(DbContract.goodsQuery(strings[0]));
+                        rs = statement.executeQuery(DbContract.goodsQuery(barcodes[0]));
                         if (rs != null) {
                             rs.next();
 
@@ -103,12 +106,10 @@ public class MainActivity extends Activity {
                             String season = rs.getString(SeasonEntry.COLUMN_SEASON);
                             float currencyPrice = rs.getFloat(PluEntry.COLUMN_CURRENT_PRICE);
                             float exchangeRate = rs.getFloat(ExchangeEntry.COLUMN_EXCHANGE_RATE);
-                            String sizeName = rs.getString(SizeEntry.COLUMN_SIZE_NAME);
+                            String size = rs.getString(SizeEntry.COLUMN_SIZE_NAME);
 
                             // get int rounded price in rubles
                             int rubPrice = Math.round(currencyPrice * exchangeRate);
-                            // parse int size from sizeName
-                            int size = Integer.parseInt(sizeName);
 
                             goods = new Goods(model, color, modelDesc, season, rubPrice, size);
                         }
@@ -137,8 +138,8 @@ public class MainActivity extends Activity {
                 colorTextView.setText(goods.getColor());
                 modelDescTextView.setText(goods.getModelDesc());
                 seasonTextView.setText(goods.getSeason());
-                sizeTextView.setText(goods.getSize());
-                priceTextView.setText(goods.getPrice());
+                sizeTextView.setText(String.valueOf(goods.getSize()));
+                priceTextView.setText(String.valueOf(goods.getPrice()));
             }
         }
     }

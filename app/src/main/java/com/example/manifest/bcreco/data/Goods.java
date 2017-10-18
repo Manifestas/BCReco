@@ -7,10 +7,10 @@ public class Goods {
     private String modelDesc;
     private String season;
     private int price;
-    private int size;
+    private String size;
 
     public Goods(String model, String color, String modelDesc, String season,
-                 int price, int size) {
+                 int price, String size) {
         this.model = model;
         this.color = color;
         this.modelDesc = modelDesc;
@@ -39,7 +39,7 @@ public class Goods {
         return price;
     }
 
-    public int getSize() {
+    public String getSize() {
         return size;
     }
 }
