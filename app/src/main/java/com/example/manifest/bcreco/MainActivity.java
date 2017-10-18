@@ -13,6 +13,8 @@ import com.example.manifest.bcreco.data.DbContract.PluEntry;
 import com.example.manifest.bcreco.data.DbContract.ModelEntry;
 import com.example.manifest.bcreco.data.DbContract.ColorEntry;
 import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
+import com.example.manifest.bcreco.data.DbContract.ExchangeEntry;
+import com.example.manifest.bcreco.data.DbContract.SizeEntry;
 import com.example.manifest.bcreco.data.Goods;
 
 import java.sql.Connection;
@@ -86,35 +88,36 @@ public class MainActivity extends Activity {
                 Class.forName("net.sourceforge.jtds.jdbc.Driver");
                 Connection connection = null;
                 Statement statement = null;
-                ResultSet resultSet = null;
+                ResultSet rs = null;
                 try {
                     connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
                         statement = connection.createStatement();
-                        resultSet = statement.executeQuery(DbContract.goodsQuery(strings[0]));
-                        if (resultSet != null) {
-                            resultSet.next();
+                        rs = statement.executeQuery(DbContract.goodsQuery(strings[0]));
+                        if (rs != null) {
+                            rs.next();
 
-                            String model = resultSet.getString(ModelEntry.COLUMN_MODEL);
-                            String color = resultSet.getString(ColorEntry.COLUMN_COLOR);
-                            String modelDesc = resultSet.getString(ModelEntry.COLUMN_MODEL_DESC);
-                            String season = resultSet.getString(SeasonEntry.COLUMN_SEASON);
+                            String model = rs.getString(ModelEntry.COLUMN_MODEL);
+                            String color = rs.getString(ColorEntry.COLUMN_COLOR);
+                            String modelDesc = rs.getString(ModelEntry.COLUMN_MODEL_DESC);
+                            String season = rs.getString(SeasonEntry.COLUMN_SEASON);
+                            float currencyPrice = rs.getFloat(PluEntry.COLUMN_CURRENT_PRICE);
+                            float exchangeRate = rs.getFloat(ExchangeEntry.COLUMN_EXCHANGE_RATE);
+                            String sizeName = rs.getString(SizeEntry.COLUMN_SIZE_NAME);
 
-                            //TODO: complete after check types
+                            // get int rounded price in rubles
+                            int rubPrice = Math.round(currencyPrice * exchangeRate);
+                            // parse int size from sizeName
+                            int size = Integer.parseInt(sizeName);
 
-
-                            int sizeId = resultSet.getInt(PluEntry.COLUMN_ID_SIZE);
-                            goods = new Goods(strings[0], modelName, colorName, modelDesc);
-                            + PluEntry.TABLE_NAME + DOT + PluEntry.COLUMN_CURRENT_PRICE + COMMA
-                                    + SizeEntry.TABLE_NAME + DOT + SizeEntry.COLUMN_SIZE_NAME + COMMA
-                                    + ExchangeEntry.TABLE_NAME + DOT + ExchangeEntry.COLUMN_EXCHANGE_RATE + COMMA
+                            goods = new Goods(model, color, modelDesc, season, rubPrice, size);
                         }
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } finally {
                     try {
-                        if (resultSet != null) resultSet.close();
+                        if (rs != null) rs.close();
                         if (statement != null) statement.close();
                         if (connection != null) connection.close();
                     } catch (SQLException e) {

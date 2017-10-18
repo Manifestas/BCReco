@@ -279,11 +279,10 @@ public final class DbContract {
          */
         public static final String COLUMN_CURRENCY_ID = "ID_Currency";
 
-        //TODO: check type.
         /**
          * Exchange rate(e.g. 75 in the moment).
          *
-         * Type:
+         * Type: FLOAT
          */
         public static final String COLUMN_EXCHANGE_RATE = "ExchangeRate";
     }
@@ -305,11 +304,10 @@ public final class DbContract {
          */
         public static final String COLUMN_SIZE_ID = "ID";
 
-        //TODO: check type
         /**
          * Size name(e.g. 39)
          *
-         * Type:
+         * Type: VARSHAR
          */
         public static final String COLUMN_SIZE_NAME = "SizeName";
     }
