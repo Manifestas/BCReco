@@ -86,6 +86,7 @@ public class MainActivity extends Activity {
             }
             Goods goods = null;
             try {
+                // initialize JDBC driver
                 // The newInstance() call is a work around for some broken Java implementations
                 //this creates some static objects that we need.
                 Class.forName("net.sourceforge.jtds.jdbc.Driver");
@@ -93,9 +94,18 @@ public class MainActivity extends Activity {
                 Statement statement = null;
                 ResultSet rs = null;
                 try {
+                    // establish a database connection
                     connection = DriverManager.getConnection(DbContract.DB_CONN_URL);
                     if (connection != null) {
+                        // A Statement is an interface that represents a SQL statement.
+                        // You execute Statement objects, and they generate ResultSet objects,
+                        // which is a table of data representing a database result set.
                         statement = connection.createStatement();
+                        /*You access the data in a ResultSet object through a cursor.
+                         Note that this cursor is not a database cursor.
+                         This cursor is a pointer that points to one row of data in the ResultSet.
+                         Initially, the cursor is positioned before the first row
+                         */
                         rs = statement.executeQuery(DbContract.goodsQuery(barcodes[0]));
                         if (rs != null) {
                             rs.next();
@@ -118,6 +128,7 @@ public class MainActivity extends Activity {
                     e.printStackTrace();
                 } finally {
                     try {
+                        // Immediately release the resources it is using.
                         if (rs != null) rs.close();
                         if (statement != null) statement.close();
                         if (connection != null) connection.close();
