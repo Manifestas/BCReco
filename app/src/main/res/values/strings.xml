@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BC Reco</string>
     <string name="barcode">Barcode</string>
+    <string name="action_settings">Settings</string>
 </resources>
