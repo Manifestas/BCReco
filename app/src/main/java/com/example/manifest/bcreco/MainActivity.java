@@ -1,6 +1,6 @@
 package com.example.manifest.bcreco;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     //this code will be returned in onActivityResult() when the activity exits.
