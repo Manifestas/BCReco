@@ -13,16 +13,27 @@ public final class DbContract {
 
     //TODO: move this to the SharedPreference and ask a user to enter log/pass in settings menu
     /**
-     * User login.
+     * Default user login.
      */
     public static final String DB_LOGIN = "tv";
-
     /**
-     * User password.
+     * Default user password.
      */
     public static final String DB_PASSWORD = "12345678";
-
+    /**
+     * Default DB IP address.
+     */
+    public static final String DB_IP = "192.168.14.2";
+    /**
+     * Default DB port.
+     */
+    public static final String DB_PORT = "1433";
+    /**
+     * Default db object.
+     */
+    public static final String UNIMOLL_ID = "119";
     public static final String DB_IP_ADDRESS = "192.168.14.2:1433";
+
     /**
      * Connection url.
      */
@@ -32,6 +43,13 @@ public final class DbContract {
                                              + ";user=" + DB_LOGIN
                                              + ";password=" + DB_PASSWORD + ";";
 
+    /**
+     * Connection url.
+     * %1$s - IP, %2$s - port, %3$s - login, %4$s - password.
+     */
+    public static final String DB_CONN_URL_FROM_PREF = "jdbc:sqlserver://%1$s:%2$s;databaseName="
+            + DB_NAME
+            + ";user=%3$s;password=%4$s;";
     /** SQL statement. */
     public static final String INNER_JOIN = " INNER JOIN ";
     /** SQL keyword. */
@@ -129,7 +147,7 @@ public final class DbContract {
     /**
      * Inner class that defines constant values for the PLU database table.
      */
-    public static final class PluEntry implements BaseColumns {
+    public static final class PluEntry {
 
         /** Name of database table for PLU*/
         public static final String TABLE_NAME = "T_PLU";
@@ -173,7 +191,7 @@ public final class DbContract {
     /**
      * Inner class that defines constant values for the model database table.
      */
-    public static final class ModelEntry implements BaseColumns {
+    public static final class ModelEntry {
 
         /** Name of database table for PLU*/
         public static final String TABLE_NAME = "T_Models";
@@ -217,7 +235,7 @@ public final class DbContract {
     /**
      * Inner class that defines constant values for the colors database table.
      */
-    public static final class ColorEntry implements BaseColumns {
+    public static final class ColorEntry {
 
         /** Name of database table for PLU*/
         public static final String TABLE_NAME = "T_ColorVend";
@@ -240,7 +258,7 @@ public final class DbContract {
     /**
      * Inner class that defines constant values for the Season database table.
      */
-    public static final class SeasonEntry implements BaseColumns {
+    public static final class SeasonEntry {
 
         /**
          * Name of database table for Seasons
@@ -265,7 +283,7 @@ public final class DbContract {
     /**
      * Inner class that defines constant values for the Exchange database table.
      */
-    public static final class ExchangeEntry implements BaseColumns {
+    public static final class ExchangeEntry {
 
         /**
          * Name of database table for Exchange
@@ -290,7 +308,7 @@ public final class DbContract {
     /**
      * Inner class that defines constant values for the Sizes database table.
      */
-    public static final class SizeEntry implements BaseColumns {
+    public static final class SizeEntry {
 
         /**
          * Name of database table for Sizes.
@@ -310,5 +328,73 @@ public final class DbContract {
          * Type: VARSHAR
          */
         public static final String COLUMN_SIZE_NAME = "SizeName";
+    }
+
+    /**
+     * Inner class that defines constant values for the Objects database table.
+     */
+    public static final class ObjectEntry {
+
+        /**
+         * Name of database table for Sizes.
+         */
+        public static final String TABLE_NAME = "T_Objects";
+
+        /**
+         * ID of object(e.g. 24033 (Unimoll)).
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_OBJECT_ID = "ID";
+
+        /**
+         * Another object ID(e.g. 24033 (Unimoll)).
+         */
+        public static final String COLUMN_OBJECT = "Object";
+
+        /**
+         * Short name of object(e.g. Юнимол)
+         *
+         * Type: VARSHAR
+         */
+        public static final String COLUMN_OBJECT_SHORT_DESC = "ShortDesc";
+
+        /**
+         * Determines whether to interrogate or not the given store at a conclusion of the rests of the goods.
+         * If it equals 2 - then the remainders are queried.
+         */
+        public static final String COLUMN_KEEP_CHECKS = "KeepChecks";
+    }
+
+    /**
+     * Inner class that defines constant values for the quantity database table.
+     */
+    public static final class LogPluCostEntry {
+
+        /**
+         * Name of database table for Sizes.
+         */
+        public static final String TABLE_NAME = "T_LocPLUCost";
+
+        /**
+         * Internal code of the article (unique for sizes).
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_ID_PLU = "ID_PLU";
+
+        /**
+         * ID of object(e.g. 24033 (Unimoll)).
+         *
+         * Type: INT
+         */
+        public static final String COLUMN_OBJECT_ID = "ID_Objects";
+
+        /**
+         * Quantity of each unique ID of goods
+         *
+         * Type: FLOAT
+         */
+        public static final String COLUMN_QUANTITY = "StockQty";
     }
 }
