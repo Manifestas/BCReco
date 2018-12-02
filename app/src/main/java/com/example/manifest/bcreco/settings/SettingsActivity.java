@@ -1,7 +1,9 @@
-package com.example.manifest.bcreco;
+package com.example.manifest.bcreco.settings;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.example.manifest.bcreco.R;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

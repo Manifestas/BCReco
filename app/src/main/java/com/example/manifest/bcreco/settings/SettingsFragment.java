@@ -1,7 +1,9 @@
-package com.example.manifest.bcreco;
+package com.example.manifest.bcreco.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import com.example.manifest.bcreco.R;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
