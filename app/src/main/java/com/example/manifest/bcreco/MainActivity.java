@@ -1,6 +1,5 @@
 package com.example.manifest.bcreco;
 
-import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,11 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.manifest.bcreco.data.DbContract;
-import com.example.manifest.bcreco.data.DbContract.PluEntry;
-import com.example.manifest.bcreco.data.DbContract.ModelEntry;
 import com.example.manifest.bcreco.data.DbContract.ColorEntry;
-import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
 import com.example.manifest.bcreco.data.DbContract.ExchangeEntry;
+import com.example.manifest.bcreco.data.DbContract.ModelEntry;
+import com.example.manifest.bcreco.data.DbContract.PluEntry;
+import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
 import com.example.manifest.bcreco.data.DbContract.SizeEntry;
 import com.example.manifest.bcreco.data.Goods;
 
@@ -24,6 +23,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
