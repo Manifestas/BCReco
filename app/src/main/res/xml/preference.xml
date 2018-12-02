@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="@string/pref_ip_key"
+        android:title="@string/pref_ip_label"
+        android:defaultValue="@string/pref_ip_default"/>
+
+    <EditTextPreference
+        android:key="@string/pref_port_key"
+        android:title="@string/pref_port_label"
+        android:defaultValue="@string/pref_port_default"/>
+
+    <EditTextPreference
+        android:key="@string/pref_login_key"
+        android:title="@string/pref_login_label"
+        android:defaultValue="@string/pref_login_default"/>
+
+    <EditTextPreference
+        android:key="@string/pref_password_key"
+        android:title="@string/pref_password_label"
+        android:defaultValue="@string/pref_password_default"/>
+
+    <EditTextPreference
+        android:key="@string/pref_store_id_key"
+        android:title="@string/pref_store_id_label"
+        android:defaultValue="@string/pref_store_id_default"/>
 
 </PreferenceScreen>
