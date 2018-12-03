@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.manifest.bcreco.R;
-import com.example.manifest.bcreco.data.DbUtils;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
@@ -65,19 +64,19 @@ public class SettingsFragment extends PreferenceFragmentCompat
         String preferenceKey = preference.getKey();
         if (preferenceKey.equals(getString(R.string.pref_ip_key))) {
             String ipAddress = (String) newValue;
-            if (!DbUtils.isIPV4(ipAddress)) {
+            if (!PreferenceValidator.isIPV4(ipAddress)) {
                 showErrorToast(getString(R.string.toast_message_incorrect_ip_address));
                 return false;
             }
         } else if (preferenceKey.equals(getString(R.string.pref_port_key))) {
             String port = (String) newValue;
-            if (!DbUtils.isPortValid(port)) {
+            if (!PreferenceValidator.isPortValid(port)) {
                 showErrorToast(getString(R.string.toast_message_incorrect_port));
                 return false;
             }
         } else if (preferenceKey.equals(getString(R.string.pref_store_id_key))) {
             String storeId = (String) newValue;
-            if (!DbUtils.isStoreIdValid(storeId)) {
+            if (!PreferenceValidator.isStoreIdValid(storeId)) {
                 showErrorToast(getString(R.string.toast_message_incorrect_store_id));
                 return false;
             }

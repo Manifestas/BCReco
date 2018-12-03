@@ -1,6 +1,6 @@
-package com.example.manifest.bcreco.data;
+package com.example.manifest.bcreco.settings;
 
-public class DbUtils {
+public class PreferenceValidator {
 
     /**
      * Validate an IPv4 address.
