@@ -5,6 +5,8 @@
         android:title="@string/pref_ip_label"
         android:defaultValue="@string/pref_ip_default"/>
 
+    <!-- TODO: singleLine, inputType -->
+
     <EditTextPreference
         android:key="@string/pref_port_key"
         android:title="@string/pref_port_label"

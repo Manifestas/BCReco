@@ -7,10 +7,12 @@
     <string name="pref_ip_label">IP address</string>
     <string name="pref_ip_key" translatable="false">ip_address</string>
     <string name="pref_ip_default" translatable="false">192.168.14.2</string>
+    <string name="toast_message_incorrect_ip_address">IP address incorrectly specified</string>
 
     <string name="pref_port_label">Port</string>
     <string name="pref_port_key" translatable="false">port</string>
     <string name="pref_port_default" translatable="false">1433</string>
+    <string name="toast_message_incorrect_port">Port incorrect</string>
 
     <string name="pref_login_label">Login</string>
     <string name="pref_login_key" translatable="false">login</string>
@@ -23,6 +25,7 @@
     <string name="pref_store_id_label">Store ID</string>
     <string name="pref_store_id_key" translatable="false">store_id</string>
     <string name="pref_store_id_default" translatable="false">119</string>
+    <string name="toast_message_incorrect_store_id">Store ID incorrectly specified</string>
     <!-- end of Preference-->
 
 </resources>
