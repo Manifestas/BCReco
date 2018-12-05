@@ -28,4 +28,6 @@
     <string name="toast_message_incorrect_store_id">Store ID incorrectly specified</string>
     <!-- end of Preference-->
 
+    <string name="camera_permission_rationale">Camera permission need for reading barcodes.</string>
+
 </resources>

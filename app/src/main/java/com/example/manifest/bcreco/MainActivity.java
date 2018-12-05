@@ -1,8 +1,11 @@
 package com.example.manifest.bcreco;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
 import com.example.manifest.bcreco.data.DbContract.SizeEntry;
 import com.example.manifest.bcreco.data.Goods;
 import com.example.manifest.bcreco.settings.SettingsActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +29,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,8 +39,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     //this code will be returned in onActivityResult() when the activity exits.
     //By it we determine from which Activity came the result
-    private static int GET_BARCODE_REQUEST = 1;
+    private static final int GET_BARCODE_REQUEST = 1;
 
+    /**
+     * Id to identify a camera permission request.
+     */
+    private static final int REQUEST_CAMERA = 10;
+
+    private View rootLayout;
     private TextView modelTextView;
     private TextView colorTextView;
     private TextView modelDescTextView;
@@ -47,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        rootLayout = findViewById(R.id.root_layout);
         modelTextView = (TextView) findViewById(R.id.tv_model);
         colorTextView = (TextView) findViewById(R.id.tv_color);
         modelDescTextView = (TextView) findViewById(R.id.tv_model_desc);
@@ -55,13 +68,7 @@ public class MainActivity extends AppCompatActivity {
         priceTextView = (TextView) findViewById(R.id.tv_price);
 
         Button barcodeBtn = (Button) findViewById(R.id.barcode_btn);
-        barcodeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-                startActivityForResult(intent, GET_BARCODE_REQUEST);
-            }
-        });
+        barcodeBtn.setOnClickListener(view -> startReadingBarcode());
     }
 
     @Override
@@ -97,6 +104,61 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Requests the Camera permission.
+     * If the permission has been denied previously, a SnackBar will prompt the user to grant the
+     * permission, otherwise it is requested directly.
+     */
+    private void requestCameraPermission() {
+        Log.i(TAG, "Permission hasn't been granted. Request permission");
+        // Permission has not been granted and must be requested.
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.CAMERA)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            Log.i(TAG, "Displaying camera permission rationale");
+            Snackbar.make(rootLayout, R.string.camera_permission_rationale, Snackbar.LENGTH_LONG)
+                    .setAction(android.R.string.ok,
+                            view -> ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.CAMERA},
+                                    REQUEST_CAMERA)
+                    ).show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        }
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "Camera permission has now been granted.");
+                startReadingBarcode();
+            } else {
+                Log.i(TAG, "Camera permission was not granted.");
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void startReadingBarcode() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            startCameraActivity();
+        } else {
+            requestCameraPermission();
+        }
+    }
+
+    private void startCameraActivity() {
+        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+        startActivityForResult(intent, GET_BARCODE_REQUEST);
     }
 
     private class GoodsDBAsyncTask extends AsyncTask<String, Void, Goods> {
