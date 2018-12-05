@@ -60,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         rootLayout = findViewById(R.id.root_layout);
-        modelTextView = (TextView) findViewById(R.id.tv_model);
-        colorTextView = (TextView) findViewById(R.id.tv_color);
-        modelDescTextView = (TextView) findViewById(R.id.tv_model_desc);
-        seasonTextView = (TextView) findViewById(R.id.tv_season);
-        sizeTextView = (TextView) findViewById(R.id.tv_size);
-        priceTextView = (TextView) findViewById(R.id.tv_price);
+        modelTextView = findViewById(R.id.tv_model);
+        colorTextView = findViewById(R.id.tv_color);
+        modelDescTextView = findViewById(R.id.tv_model_desc);
+        seasonTextView = findViewById(R.id.tv_season);
+        sizeTextView = findViewById(R.id.tv_size);
+        priceTextView = findViewById(R.id.tv_price);
 
-        Button barcodeBtn = (Button) findViewById(R.id.barcode_btn);
+        Button barcodeBtn = findViewById(R.id.barcode_btn);
         barcodeBtn.setOnClickListener(view -> startReadingBarcode());
     }
 
