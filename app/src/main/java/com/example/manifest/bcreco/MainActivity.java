@@ -3,14 +3,18 @@ package com.example.manifest.bcreco;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.manifest.bcreco.data.DbContract;
 import com.example.manifest.bcreco.data.DbContract.ColorEntry;
@@ -39,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     //this code will be returned in onActivityResult() when the activity exits.
     //By it we determine from which Activity came the result
-    private static final int GET_BARCODE_REQUEST = 1;
+    private static final int GET_BARCODE_REQUEST_CODE = 1;
+    private static final int GET_PERMISSION_REQUEST_CODE = 2;
 
     /**
      * Id to identify a camera permission request.
@@ -73,17 +78,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
         // Check which request we're responding to
-        if (requestCode == GET_BARCODE_REQUEST) {
+        if (requestCode == GET_BARCODE_REQUEST_CODE) {
             // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK && data != null) {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
                 new GoodsDBAsyncTask().execute(barcodeString);
             }
+        } else if (requestCode == GET_PERMISSION_REQUEST_CODE) {
+            Log.i(TAG, "Coming back from permission settings");
+            startReadingBarcode();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -141,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
                 startReadingBarcode();
             } else {
                 Log.i(TAG, "Camera permission was not granted.");
+                // User denied permission and clicked "don't ask again"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    showNoCameraPermissionSnackbar();
+                }
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -158,7 +170,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCameraActivity() {
         Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-        startActivityForResult(intent, GET_BARCODE_REQUEST);
+        startActivityForResult(intent, GET_BARCODE_REQUEST_CODE);
+    }
+
+    public void showNoCameraPermissionSnackbar() {
+        Log.i(TAG, "Displaying snackbar with app settings for permission.");
+        Snackbar.make(rootLayout, R.string.camera_permission_is_not_granted, Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_settings, v -> {
+                    openApplicationSettings();
+
+                    Toast.makeText(getApplicationContext(),
+                            R.string.camera_permission_settings_explanation,
+                            Toast.LENGTH_SHORT)
+                            .show();
+                })
+                .show();
+    }
+
+    public void openApplicationSettings() {
+        Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + getPackageName()));
+        Log.i(TAG, "Open application settings for result.");
+        startActivityForResult(appSettingsIntent, GET_PERMISSION_REQUEST_CODE);
     }
 
     private class GoodsDBAsyncTask extends AsyncTask<String, Void, Goods> {
