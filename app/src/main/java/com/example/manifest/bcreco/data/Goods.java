@@ -42,4 +42,15 @@ public class Goods {
     public String getSize() {
         return size;
     }
+
+    /**
+     * Removes leading zeros and last character(check sum number) from the string.
+     * @param barcode String from which need to get PLU.
+     * @return String PLU.
+     */
+    public static String getPluFromBarcode(String barcode) {
+        // ^ anchors to the start of the string. The 0* means zero or more 0 characters.
+        barcode = barcode.replaceFirst("^0*", "");
+        return barcode.substring(0, barcode.length() - 1);
+    }
 }
