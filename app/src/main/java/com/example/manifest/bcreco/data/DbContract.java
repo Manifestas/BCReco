@@ -57,7 +57,7 @@ public final class DbContract {
      */
     public static final String EQUALS = " = ";
     /**
-     * Query from TradeX table for getting Goods and quantity passing id_plu.
+     * Query from TradeX table for getting Product and quantity passing id_plu.
      */
     public static final String queryPluQty =
             "SELECT "

@@ -1,6 +1,6 @@
 package com.example.manifest.bcreco.data;
 
-public class Goods {
+public class Product {
 
     private String model;
     private String color;
@@ -9,8 +9,8 @@ public class Goods {
     private int price;
     private String size;
 
-    public Goods(String model, String color, String modelDesc, String season,
-                 int price, String size) {
+    public Product(String model, String color, String modelDesc, String season,
+                   int price, String size) {
         this.model = model;
         this.color = color;
         this.modelDesc = modelDesc;
