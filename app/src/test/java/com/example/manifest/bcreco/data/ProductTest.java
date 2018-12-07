@@ -33,7 +33,7 @@ public class ProductTest {
 
     @Test
     public void addStoreStockInfoAddToEmpty() {
-        Product product = new Product("model", "color", "modelDesc", "season", 10000, "38");
+        Product product = new Product("model", "color", "modelDesc", "season", 10000);
         product.addStoreStockInfo("Unimoll", 39, 1);
         List<StoreStock> stores = product.getStores();
         StoreStock store = new StoreStock("Unimoll");
@@ -43,7 +43,7 @@ public class ProductTest {
 
     @Test
     public void addStoreStockInfoAddSameStoreAnotherSize() {
-        Product product = new Product("model", "color", "modelDesc", "season", 10000, "38");
+        Product product = new Product("model", "color", "modelDesc", "season", 10000);
         product.addStoreStockInfo("Unimoll", 39, 1);
         product.addStoreStockInfo("Unimoll", 40, 1);
         List<StoreStock> stores = product.getStores();
@@ -55,7 +55,7 @@ public class ProductTest {
 
     @Test
     public void addStoreStockInfoAddAnotherStore() {
-        Product product = new Product("model", "color", "modelDesc", "season", 10000, "38");
+        Product product = new Product("model", "color", "modelDesc", "season", 10000);
         product.addStoreStockInfo("Unimoll", 39, 1);
         product.addStoreStockInfo("Inet", 39, 1);
         List<StoreStock> stores = product.getStores();
