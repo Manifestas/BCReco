@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 
 import com.example.manifest.bcreco.data.DbConnectionParams;
 import com.example.manifest.bcreco.data.DbHelper;
-import com.example.manifest.bcreco.data.Product;
+import com.example.manifest.bcreco.models.Product;
 import com.example.manifest.bcreco.settings.PrefHelper;
 
 import androidx.annotation.NonNull;

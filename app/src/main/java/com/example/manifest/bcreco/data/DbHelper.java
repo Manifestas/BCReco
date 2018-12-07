@@ -10,6 +10,7 @@ import com.example.manifest.bcreco.data.DbContract.ObjectEntry;
 import com.example.manifest.bcreco.data.DbContract.PluEntry;
 import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
 import com.example.manifest.bcreco.data.DbContract.SizeEntry;
+import com.example.manifest.bcreco.models.Product;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,7 @@
-package com.example.manifest.bcreco.data;
+package com.example.manifest.bcreco.models;
+
+import com.example.manifest.bcreco.models.Product;
+import com.example.manifest.bcreco.models.StoreStock;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.manifest.bcreco.data;
+package com.example.manifest.bcreco.models;
 
 import java.util.ArrayList;
 import java.util.List;
