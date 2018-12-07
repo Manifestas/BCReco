@@ -2,12 +2,14 @@ package com.example.manifest.bcreco.data;
 
 import android.util.Log;
 
-import com.example.manifest.bcreco.data.DbContract.ModelEntry;
 import com.example.manifest.bcreco.data.DbContract.ColorEntry;
-import com.example.manifest.bcreco.data.DbContract.SizeEntry;
+import com.example.manifest.bcreco.data.DbContract.ExchangeEntry;
 import com.example.manifest.bcreco.data.DbContract.LogPluCostEntry;
-import com.example.manifest.bcreco.data.DbContract.PluEntry;
+import com.example.manifest.bcreco.data.DbContract.ModelEntry;
 import com.example.manifest.bcreco.data.DbContract.ObjectEntry;
+import com.example.manifest.bcreco.data.DbContract.PluEntry;
+import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
+import com.example.manifest.bcreco.data.DbContract.SizeEntry;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,13 +24,20 @@ public class DbHelper {
     private static Connection connection;
     private static PreparedStatement statement;
 
-    public static void dbConnect() {
+    public static void dbConnect(DbConnectionParams connectionParams) {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbUrl = String.format(DbContract.DB_CONN_URL, Prefs.getIp(), Prefs.getPort(), Prefs.getLogin(), Prefs.getPassword());
+            // initialize JDBC driver
+            // The newInstance() call is a work around for some broken Java implementations
+            // this creates some static objects that we need.
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            String dbUrl = String.format(DbContract.DB_CONN_URL_FROM_PREF,
+                    connectionParams.getIp(),
+                    connectionParams.getPort(),
+                    connectionParams.getLogin(),
+                    connectionParams.getPassword());
             connection = DriverManager.getConnection(dbUrl);
 
-            Log.i(TAG,"Got connection: " + connection);
+            Log.i(TAG, "Got connection: " + connection);
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "ClassNotFoundException while loading JDBC driver: " + e);
         } catch (SQLException e) {
@@ -57,13 +66,13 @@ public class DbHelper {
             closeStatement();
             closeConnection();
         } catch (SQLException e) {
-            Log.e(TAG, "Exception while disposing DB: " + e);
+            Log.w(TAG, "Exception while disposing DB: " + e);
         }
     }
 
-    public static void dbReconnect() {
+    public static void dbReconnect(DbConnectionParams connectionParams) {
         dispose();
-        dbConnect();
+        dbConnect(connectionParams);
     }
 
     private static ResultSet getResultSet(String pluId) throws SQLException {
@@ -77,58 +86,58 @@ public class DbHelper {
         return statement.executeQuery();
     }
 
-    private static Product getProductFromResultSet(ResultSet resultSet) throws SQLException {
-        String modelName = resultSet.getString(ModelEntry.COLUMN_MODEL);
-        String color = resultSet.getString(ColorEntry.COLUMN_COLOR);
-        String size = resultSet.getString(SizeEntry.COLUMN_SIZE_NAME);
+    private static Product getProductFromResultSet(ResultSet rs) throws SQLException {
+        String model = rs.getString(ModelEntry.COLUMN_MODEL);
+        String color = rs.getString(ColorEntry.COLUMN_COLOR);
+        String modelDesc = rs.getString(ModelEntry.COLUMN_MODEL_DESC);
+        String season = rs.getString(SeasonEntry.COLUMN_SEASON);
+        float currencyPrice = rs.getFloat(PluEntry.COLUMN_CURRENT_PRICE);
+        float exchangeRate = rs.getFloat(ExchangeEntry.COLUMN_EXCHANGE_RATE);
 
-        Product currentProduct = new Product(modelName, color, size);
+        // get int rounded price in rubles
+        int rubPrice = Math.round(currencyPrice * exchangeRate);
 
-        log.finest("Getting a Product from ResultSet: " + currentProduct);
+        Product product = new Product(model, color, modelDesc, season, rubPrice);
 
-        return currentProduct;
+        Log.d(TAG, "Getting a Product from ResultSet: " + product);
+
+        return product;
     }
 
     /**
-     * Returns the product received from the database with this pluID,
-     * if there are no any sizes of this article on the residuals.
+     * Returns the product received from specified in DbConnectionParams database with this barcode.
      * We can't use barcode search, because there is no barcode in database for absolute new product
      * while invoice won't be closed. And we can't specify the object immediately in the query,
      * because if the product hasn't been in your object yet the quantity won't be displayed (even zero)
      * and the query returns null.
      *
-     * @param pluId of product.
-     * @return A Product with this pluID, if quantity of any of its sizes is zero.
+     * @param params  DataBase connection parameters.
+     * @param barcode of product.
+     * @return A Product with this barcode.
      */
-    public static Product returnProductIfNew(String pluId) {
+    public static Product returnProductFromDb(DbConnectionParams params, String barcode) {
+        String pluId = Product.getPluFromBarcode(barcode);
         Product product = null;
         try {
             if (connection == null) {
-                log.finest("Connection == null");
+                Log.d(TAG, "Connection == null");
 
-                dbConnect();
+                dbConnect(params);
             }
             try (ResultSet rs = getResultSet(pluId)) {
                 if (rs == null) {
-                    log.finest("ResultSet == null");
-                    MidiPlayer.playAlarmSound();
-
+                    Log.d(TAG, "ResultSet == null");
                     return null;
                 }
-                String userObjectID = Prefs.getObject();
-                // check each size and each object
                 while (rs.next()) {
-                    boolean objectIsTheSame = rs.getString(ObjectEntry.COLUMN_OBJECT).equals(userObjectID);
-                    //if this is the same object as ours and the quantity of goods with this size is greater than zero
-                    if (objectIsTheSame && rs.getInt(LogPluCostEntry.COLUMN_QUANTITY) > 0) {
-                        log.info(rs.getString(ModelEntry.COLUMN_MODEL) + " > 0");
-                        //immediately go out with null
-                        return null;
-                    }
-                    //if we haven't found our product and  ID_PLU matches argument...
-                    if (product == null && rs.getString(DbContract.PluEntry.COLUMN_ID).equals(pluId)) {
-                        // ... remember it in product
+                    if (product == null) {
                         product = getProductFromResultSet(rs);
+                    }
+                    int quantity = rs.getInt(LogPluCostEntry.COLUMN_QUANTITY);
+                    if (quantity != 0) {
+                        String storeName = rs.getString(ObjectEntry.COLUMN_OBJECT);
+                        int size = rs.getInt(SizeEntry.COLUMN_SIZE_NAME);
+                        product.addStoreStockInfo(storeName, size, quantity);
                     }
                 }
             }
@@ -139,7 +148,7 @@ public class DbHelper {
             // close all
             dispose();
         }
-        log.finest("Returning a new product: " + product);
+        Log.d(TAG, "Returning a new product: " + product);
         return product;
     }
 }
