@@ -1,5 +1,8 @@
 package com.example.manifest.bcreco.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Product {
 
     private String model;
@@ -8,6 +11,7 @@ public class Product {
     private String season;
     private int price;
     private String size;
+    private List<StoreStock> stores = new ArrayList<>();
 
     public Product(String model, String color, String modelDesc, String season,
                    int price, String size) {
@@ -17,6 +21,22 @@ public class Product {
         this.season = season;
         this.price = price;
         this.size = size;
+    }
+
+    /**
+     * Removes leading zeros and last character(check sum number) from the string.
+     *
+     * @param barcode String from which need to get PLU.
+     * @return String PLU.
+     */
+    public static String getPluFromBarcode(String barcode) {
+        // ^ anchors to the start of the string. The 0* means zero or more 0 characters.
+        barcode = barcode.replaceFirst("^0*", "");
+        return barcode.substring(0, barcode.length() - 1);
+    }
+
+    public List<StoreStock> getStores() {
+        return stores;
     }
 
     public String getModel() {
@@ -41,16 +61,5 @@ public class Product {
 
     public String getSize() {
         return size;
-    }
-
-    /**
-     * Removes leading zeros and last character(check sum number) from the string.
-     * @param barcode String from which need to get PLU.
-     * @return String PLU.
-     */
-    public static String getPluFromBarcode(String barcode) {
-        // ^ anchors to the start of the string. The 0* means zero or more 0 characters.
-        barcode = barcode.replaceFirst("^0*", "");
-        return barcode.substring(0, barcode.length() - 1);
     }
 }
