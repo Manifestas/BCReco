@@ -39,12 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 10;
 
     private View rootLayout;
-    private TextView modelTextView;
-    private TextView colorTextView;
-    private TextView modelDescTextView;
-    private TextView seasonTextView;
-    private TextView sizeTextView;
-    private TextView priceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +46,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         rootLayout = findViewById(R.id.root_layout);
-        modelTextView = findViewById(R.id.tv_model);
-        colorTextView = findViewById(R.id.tv_color);
-        modelDescTextView = findViewById(R.id.tv_model_desc);
-        seasonTextView = findViewById(R.id.tv_season);
-        sizeTextView = findViewById(R.id.tv_size);
-        priceTextView = findViewById(R.id.tv_price);
 
         Button barcodeBtn = findViewById(R.id.barcode_btn);
         barcodeBtn.setOnClickListener(view -> startReadingBarcode());

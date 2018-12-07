@@ -16,40 +16,4 @@
         android:text="@string/barcode"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        tools:text="d717060cvilko1013"
-        android:id="@+id/tv_model"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        tools:text="perol"
-        android:id="@+id/tv_color"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        tools:text="boots"
-        android:id="@+id/tv_model_desc"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        tools:text="winter 2018-19"
-        android:id="@+id/tv_season"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        tools:text="39"
-        android:id="@+id/tv_size"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        tools:text="100000"
-        android:id="@+id/tv_price"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>
