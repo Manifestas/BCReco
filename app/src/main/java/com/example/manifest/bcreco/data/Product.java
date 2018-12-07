@@ -62,4 +62,16 @@ public class Product {
     public String getSize() {
         return size;
     }
+
+    public void addStoreStockInfo(String storeName, int size, int count) {
+        for (StoreStock store : stores) {
+            if (store.getStoreName().equals(storeName)) {
+                store.addSizeCount(size, count);
+                return;
+            }
+        }
+        StoreStock storeStock = new StoreStock(storeName);
+        storeStock.addSizeCount(size, count);
+        stores.add(storeStock);
+    }
 }
