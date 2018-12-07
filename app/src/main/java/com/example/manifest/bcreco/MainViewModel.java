@@ -27,6 +27,10 @@ public class MainViewModel extends AndroidViewModel {
         return product;
     }
 
+    public void init(String barcode) {
+        loadProductFromDB(barcode);
+    }
+
     @SuppressLint("StaticFieldLeak")
     private void loadProductFromDB(String barcode) {
         new AsyncTask<String, Void, Product>() {

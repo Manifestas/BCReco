@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class ProductInfoFragment extends Fragment {
 
@@ -22,18 +24,14 @@ public class ProductInfoFragment extends Fragment {
     private TextView seasonTextView;
     private TextView priceTextView;
 
+    private MainViewModel viewModel;
+
     public static Fragment newInstance(String barcode) {
         Bundle args = new Bundle();
         args.putString(ARG_BARCODE, barcode);
         ProductInfoFragment fragment = new ProductInfoFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        String barcode = getArguments().getString(ARG_BARCODE);
     }
 
     @Nullable
@@ -48,5 +46,20 @@ public class ProductInfoFragment extends Fragment {
         priceTextView = v.findViewById(R.id.tv_price);
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        String barcode = getArguments().getString(ARG_BARCODE);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.init(barcode);
+        viewModel.getProduct().observe(this, product -> {
+            modelTextView.setText(product.getModel());
+            colorTextView.setText(product.getColor());
+            modelDescTextView.setText(product.getModelDesc());
+            seasonTextView.setText(product.getPrice());
+            priceTextView.setText(product.getPrice());
+        });
     }
 }
