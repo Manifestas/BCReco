@@ -1,4 +1,4 @@
-package com.example.manifest.bcreco;
+package com.example.manifest.bcreco.main_screen;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.manifest.bcreco.CameraActivity;
+import com.example.manifest.bcreco.R;
 import com.example.manifest.bcreco.settings.SettingsActivity;
 import com.google.android.material.snackbar.Snackbar;
 

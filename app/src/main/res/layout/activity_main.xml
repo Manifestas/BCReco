@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context="com.example.manifest.bcreco.MainActivity">
+    tools:context="com.example.manifest.bcreco.main_screen.MainActivity">
 
     <Button
         android:layout_width="wrap_content"
