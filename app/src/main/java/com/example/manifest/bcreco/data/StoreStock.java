@@ -2,6 +2,7 @@ package com.example.manifest.bcreco.data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class StoreStock {
 
@@ -15,6 +16,21 @@ public class StoreStock {
 
     public String getStoreName() {
         return storeName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StoreStock that = (StoreStock) o;
+        return Objects.equals(storeName, that.storeName) &&
+                Objects.equals(sizesCount, that.sizesCount);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(storeName, sizesCount);
     }
 
     public void addSizeCount(int size, int count) {
