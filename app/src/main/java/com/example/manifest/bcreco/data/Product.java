@@ -10,11 +10,11 @@ public class Product {
     private String modelDesc;
     private String season;
     private int price;
-    private String size;
+    private int size;
     private List<StoreStock> stores = new ArrayList<>();
 
     public Product(String model, String color, String modelDesc, String season,
-                   int price, String size) {
+                   int price, int size) {
         this.model = model;
         this.color = color;
         this.modelDesc = modelDesc;
@@ -30,8 +30,14 @@ public class Product {
      * @return String PLU.
      */
     public static String getPluFromBarcode(String barcode) {
+        if (barcode == null || barcode.isEmpty()) {
+            return null;
+        }
         // ^ anchors to the start of the string. The 0* means zero or more 0 characters.
         barcode = barcode.replaceFirst("^0*", "");
+        if (barcode.isEmpty()) { // if barcode was "00000001"
+            return null;
+        }
         return barcode.substring(0, barcode.length() - 1);
     }
 
@@ -59,7 +65,7 @@ public class Product {
         return price;
     }
 
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
