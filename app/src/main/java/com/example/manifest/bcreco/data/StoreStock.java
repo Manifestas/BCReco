@@ -12,6 +12,11 @@ public class StoreStock {
     public StoreStock(String name) {
         storeName = name;
     }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
     public void addSizeCount(int size, int count) {
         sizesCount.put(size, count);
     }
