@@ -10,17 +10,14 @@ public class Product {
     private String modelDesc;
     private String season;
     private int price;
-    private int size;
     private List<StoreStock> stores = new ArrayList<>();
 
-    public Product(String model, String color, String modelDesc, String season,
-                   int price, int size) {
+    public Product(String model, String color, String modelDesc, String season, int price) {
         this.model = model;
         this.color = color;
         this.modelDesc = modelDesc;
         this.season = season;
         this.price = price;
-        this.size = size;
     }
 
     /**
@@ -63,10 +60,6 @@ public class Product {
 
     public int getPrice() {
         return price;
-    }
-
-    public int getSize() {
-        return size;
     }
 
     public void addStoreStockInfo(String storeName, int size, int count) {
