@@ -2,6 +2,8 @@ package com.example.manifest.bcreco.utils;
 
 import android.util.Log;
 
+import com.example.manifest.bcreco.models.InfoFromSite;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueryUtils {
 
@@ -23,10 +27,10 @@ public class QueryUtils {
     private static final String MODEL_TAG = "tags%5B%5D=";
     private static final String USER_AGENT = "Mozilla/5.0";
 
-    private String article;
+    private static String article;
 
-    public String fetchMaxPrice(String model) {
-        this.article = model;
+    public static InfoFromSite fetchInfoFromSite(String model) {
+        article = model;
         URL url = createUrl(model);
         String jsonResponse = null;
         try {
@@ -34,18 +38,18 @@ public class QueryUtils {
         } catch (IOException e) {
             Log.e(TAG, "Problem with request: " + e);
         }
-        String maxPrice = extractMaxPriceFromJson(jsonResponse);
-        return maxPrice;
+        return extractProductInfoFromJson(jsonResponse);
     }
 
-    private String extractMaxPriceFromJson(String jsonResponse) {
-        if (jsonResponse.isEmpty()) {
+    private static InfoFromSite extractProductInfoFromJson(String jsonResponse) {
+        if (jsonResponse == null || jsonResponse.isEmpty()) {
             return null;
         }
-        String maxPrice = null;
+        String maxPrice = "";
+        List<String> imageUrls = new ArrayList<>();
         try {
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            JSONArray products = jsonObject.getJSONArray("products");
+            JSONObject root = new JSONObject(jsonResponse);
+            JSONArray products = root.getJSONArray("products");
             //if array is empty - return null;
             if (products.isNull(0)) {
                 Log.w(TAG, article + " not found");
@@ -56,25 +60,33 @@ public class QueryUtils {
                 JSONObject properties = model.getJSONObject("PROPERTIES");
                 JSONObject articul = properties.getJSONObject("ARTICUL");
                 String propertiesModel = articul.getString("value");
-                // убрать эскейп символ
+                // remove escape symbol
                 propertiesModel = propertiesModel.replace("\\", "");
                 if (article.equals(propertiesModel)) {
                     // if key "IS_SALE_PRICE" false - return null
-                    if (!model.getBoolean("IS_SALE_PRICE")) {
-                        Log.d(TAG, article + " not for sale");
-                        return null;
+                    if (model.getBoolean("IS_SALE_PRICE")) {
+                        maxPrice = model.getString("PRICE");
                     }
-                    int maxPriceInt = model.getInt("PRICE");
-                    maxPrice = String.valueOf(maxPriceInt);
+//                    int maxPriceInt = model.getInt("PRICE");
+//                    maxPrice = String.valueOf(maxPriceInt);
+                    JSONObject pictureData = model.getJSONObject("PICTURE_DATA");
+                    String firstImage = pictureData.getString("medium2");
+                    imageUrls.add(firstImage);
+                    JSONArray extendedImages = model.getJSONArray("ADDITIONAL_IMAGES_EXTENDED");
+                    for (int j = 0; j < extendedImages.length(); j++) {
+                        JSONObject imageObject = extendedImages.getJSONObject(j);
+                        String imageUrl = imageObject.getString("medium2");
+                        imageUrls.add(imageUrl);
+                    }
                 }
             }
         } catch (JSONException e) {
             Log.e(TAG, "Problems with parsing JSON");
         }
-        return maxPrice;
+        return new InfoFromSite(maxPrice, imageUrls);
     }
 
-    private URL createUrl(String query) {
+    private static URL createUrl(String query) {
         URL url = null;
         URI uri = URI.create(REQUEST_URL + MODEL_TAG + query);
         try {
@@ -85,7 +97,7 @@ public class QueryUtils {
         return url;
     }
 
-    private String makeHttpRequest(URL url) throws IOException {
+    private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
         //if url is null - return early
         if (url == null) {
@@ -101,8 +113,6 @@ public class QueryUtils {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", USER_AGENT);
 
-            //if the request was successful(response code 200),
-            //then read the input stream and parse the response.
             if (connection.getResponseCode() == 200) {
                 inputStream = connection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
@@ -122,7 +132,7 @@ public class QueryUtils {
         return jsonResponse;
     }
 
-    private String readFromStream(InputStream inputStream) throws IOException {
+    private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder builder = new StringBuilder();
         if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
