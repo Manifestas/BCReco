@@ -33,6 +33,7 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation files('src/libs/iconv.jar')
     implementation files('src/libs/zbar.jar')
     implementation files('src/libs/jtds-1.2.8.jar')
