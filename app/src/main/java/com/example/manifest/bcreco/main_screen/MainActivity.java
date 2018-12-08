@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.manifest.bcreco.CameraActivity;
+import com.example.manifest.bcreco.camera.CameraActivity;
 import com.example.manifest.bcreco.R;
 import com.example.manifest.bcreco.settings.SettingsActivity;
 import com.google.android.material.snackbar.Snackbar;

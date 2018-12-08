@@ -1,4 +1,4 @@
-package com.example.manifest.bcreco;
+package com.example.manifest.bcreco.camera;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.FrameLayout;
+
+import com.example.manifest.bcreco.R;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;

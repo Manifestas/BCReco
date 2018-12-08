@@ -1,4 +1,4 @@
-package com.example.manifest.bcreco;
+package com.example.manifest.bcreco.camera;
 
 import android.content.Context;
 import android.graphics.ImageFormat;

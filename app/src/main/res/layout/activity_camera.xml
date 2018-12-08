@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:id="@+id/camera_scanner"
     android:layout_height="match_parent"
-    tools:context="com.example.manifest.bcreco.CameraActivity">
+    tools:context="com.example.manifest.bcreco.camera.CameraActivity">
 
 </FrameLayout>
