@@ -16,8 +16,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class ProductInfoFragment extends Fragment {
 
-    private static final String ARG_BARCODE = "arg_barcode";
-
     private TextView modelTextView;
     private TextView colorTextView;
     private TextView modelDescTextView;
@@ -26,12 +24,8 @@ public class ProductInfoFragment extends Fragment {
 
     private MainViewModel viewModel;
 
-    public static Fragment newInstance(String barcode) {
-        Bundle args = new Bundle();
-        args.putString(ARG_BARCODE, barcode);
-        ProductInfoFragment fragment = new ProductInfoFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static Fragment newInstance() {
+        return new ProductInfoFragment();
     }
 
     @Nullable
@@ -51,9 +45,7 @@ public class ProductInfoFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String barcode = getArguments().getString(ARG_BARCODE);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.init(barcode);
         viewModel.getProduct().observe(this, product -> {
             modelTextView.setText(product.getModel());
             colorTextView.setText(product.getColor());
