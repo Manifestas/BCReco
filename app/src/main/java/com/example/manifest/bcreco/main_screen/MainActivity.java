@@ -14,14 +14,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.manifest.bcreco.camera.CameraActivity;
+import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
+import com.example.manifest.bcreco.camera.CameraActivity;
+import com.example.manifest.bcreco.models.InfoFromSite;
+import com.example.manifest.bcreco.models.Product;
 import com.example.manifest.bcreco.settings.SettingsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,16 +47,32 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 10;
 
     private View rootLayout;
+    private MainViewModel viewModel;
+    private ViewPager photoViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         rootLayout = findViewById(R.id.root_layout);
 
         Button barcodeBtn = findViewById(R.id.barcode_btn);
         barcodeBtn.setOnClickListener(view -> startReadingBarcode());
+
+        FragmentManager fm = getSupportFragmentManager();
+        addProductInfoFragment(fm);
+        initPhotoViewPager(fm);
+
+        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel.getProduct().observe(this, product -> {
+
+            PagerAdapter adapter = photoViewPager.getAdapter();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -58,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
-                // TODO: new GoodsDBAsyncTask().execute(barcodeString);
+                viewModel.init(barcodeString);
             }
         } else if (requestCode == GET_PERMISSION_REQUEST_CODE) {
             Log.i(TAG, "Coming back from permission settings");
@@ -166,5 +191,37 @@ public class MainActivity extends AppCompatActivity {
                 Uri.parse("package:" + getPackageName()));
         Log.i(TAG, "Open application settings for result.");
         startActivityForResult(appSettingsIntent, GET_PERMISSION_REQUEST_CODE);
+    }
+
+    private void addProductInfoFragment(FragmentManager fm) {
+        Fragment fragmentInfo = fm.findFragmentById(R.id.fragment_info_container);
+        if (fragmentInfo == null) {
+            fragmentInfo = ProductInfoFragment.newInstance();
+            fm.beginTransaction()
+                    .add(R.id.fragment_info_container, fragmentInfo)
+                    .commit();
+        }
+    }
+
+    private void initPhotoViewPager(FragmentManager fm) {
+        photoViewPager = findViewById(R.id.photo_viewpager);
+        photoViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+            @Override
+            public Fragment getItem(int position) {
+                return PhotoFragment.newInstance(position);
+            }
+
+            @Override
+            public int getCount() {
+                Product product = viewModel.getProduct().getValue();
+                if (product != null) {
+                    InfoFromSite info = product.getInfoFromSite();
+                    if (info != null) {
+                        return info.getImageUrls().size();
+                    }
+                }
+                return 0;
+            }
+        });
     }
 }
