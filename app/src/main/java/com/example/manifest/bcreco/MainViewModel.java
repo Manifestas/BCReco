@@ -8,6 +8,7 @@ import com.example.manifest.bcreco.data.DbConnectionParams;
 import com.example.manifest.bcreco.data.DbHelper;
 import com.example.manifest.bcreco.models.Product;
 import com.example.manifest.bcreco.settings.PrefHelper;
+import com.example.manifest.bcreco.utils.QueryUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -33,20 +34,34 @@ public class MainViewModel extends AndroidViewModel {
 
     @SuppressLint("StaticFieldLeak")
     private void loadProductFromDB(String barcode) {
-        new AsyncTask<String, Void, Product>() {
+        new AsyncTask<String, Product, Product>() {
             @Override
             protected Product doInBackground(String... barcodes) {
                 // Don't perform the request if there are no barcodes, or the first barcode is null
                 if (barcodes.length < 1 || barcodes[0] == null) {
                     return null;
                 }
-                return DbHelper.returnProductFromDb(connectionParams, barcodes[0]);
+                Product product = DbHelper.returnProductFromDb(connectionParams, barcodes[0]);
+
+                if (product != null) {
+                    publishProgress(product);
+
+                    String productModel = product.getModel();
+                    product.setInfoFromSite(QueryUtils.fetchInfoFromSite(productModel));
+                }
+                return product;
             }
 
             @Override
-            protected void onPostExecute(Product productFromDb) {
-                product.setValue(productFromDb);
+            protected void onProgressUpdate(Product... values) {
+                super.onProgressUpdate(values);
+                product.setValue(values[0]);
             }
-        };
+
+            @Override
+            protected void onPostExecute(Product productWithInfo) {
+                product.setValue(productWithInfo);
+            }
+        }.execute(barcode);
     }
 }
