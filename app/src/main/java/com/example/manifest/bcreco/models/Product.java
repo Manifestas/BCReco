@@ -11,6 +11,7 @@ public class Product {
     private String season;
     private int price;
     private List<StoreStock> stores = new ArrayList<>();
+    private InfoFromSite infoFromSite;
 
     public Product(String model, String color, String modelDesc, String season, int price) {
         this.model = model;
@@ -60,6 +61,14 @@ public class Product {
 
     public int getPrice() {
         return price;
+    }
+
+    public InfoFromSite getInfoFromSite() {
+        return infoFromSite;
+    }
+
+    public void setInfoFromSite(InfoFromSite infoFromSite) {
+        this.infoFromSite = infoFromSite;
     }
 
     public void addStoreStockInfo(String storeName, int size, int count) {
