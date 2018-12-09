@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.manifest.bcreco.MainViewModel;
@@ -23,7 +24,7 @@ public class ProductInfoFragment extends Fragment {
     private TextView seasonTextView;
     private TextView priceTextView;
     private TextView maxPriceTextView;
-
+    private GridView sizesGridView;
     private MainViewModel viewModel;
 
     public static Fragment newInstance() {
@@ -41,6 +42,7 @@ public class ProductInfoFragment extends Fragment {
         seasonTextView = v.findViewById(R.id.tv_season);
         priceTextView = v.findViewById(R.id.tv_price);
         maxPriceTextView = v.findViewById(R.id.tv_max_price);
+        sizesGridView = v.findViewById(R.id.gv_sizes);
 
         return v;
     }
