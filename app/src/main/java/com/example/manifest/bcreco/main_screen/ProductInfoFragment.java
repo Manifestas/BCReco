@@ -1,5 +1,6 @@
 package com.example.manifest.bcreco.main_screen;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ public class ProductInfoFragment extends Fragment {
     private TextView modelDescTextView;
     private TextView seasonTextView;
     private TextView priceTextView;
+    private TextView maxPriceTextView;
 
     private MainViewModel viewModel;
 
@@ -38,6 +40,7 @@ public class ProductInfoFragment extends Fragment {
         modelDescTextView = v.findViewById(R.id.tv_model_desc);
         seasonTextView = v.findViewById(R.id.tv_season);
         priceTextView = v.findViewById(R.id.tv_price);
+        maxPriceTextView = v.findViewById(R.id.tv_max_price);
 
         return v;
     }
@@ -52,6 +55,9 @@ public class ProductInfoFragment extends Fragment {
             modelDescTextView.setText(product.getModelDesc());
             seasonTextView.setText(product.getPrice());
             priceTextView.setText(product.getPrice());
+            maxPriceTextView.setText(product.getInfoFromSite().getMaxPrice());
+            // make text crossed
+            maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         });
     }
 }
