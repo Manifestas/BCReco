@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <GridLayout
         android:layout_width="match_parent"
@@ -62,6 +61,8 @@
 
     <GridView
         android:id="@+id/gv_sizes"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnWidth="48dp"

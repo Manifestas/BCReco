@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -43,6 +46,13 @@ public class ProductInfoFragment extends Fragment {
         priceTextView = v.findViewById(R.id.tv_price);
         maxPriceTextView = v.findViewById(R.id.tv_max_price);
         sizesGridView = v.findViewById(R.id.gv_sizes);
+        List<String> list = new ArrayList<>();
+        float d = 35;
+        for (int i = 0; i < 10; i++) {
+            d += 0.5;
+            list.add(String.valueOf(d));
+        }
+        sizesGridView.setAdapter(new SizesGridViewAdapter(getActivity(), list));
 
         return v;
     }
