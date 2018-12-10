@@ -8,7 +8,7 @@ public class StoreStock {
 
     private String storeName;
 
-    private Map<Integer, Integer> sizesCount = new HashMap<>();
+    private Map<String, Integer> sizesCount = new HashMap<>();
 
     public StoreStock(String name) {
         storeName = name;
@@ -33,7 +33,7 @@ public class StoreStock {
         return Objects.hash(storeName, sizesCount);
     }
 
-    public void addSizeCount(int size, int count) {
+    public void addSizeCount(String size, int count) {
         sizesCount.put(size, count);
     }
 }

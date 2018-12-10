@@ -137,7 +137,7 @@ public class DbHelper {
                     int quantity = rs.getInt(LogPluCostEntry.COLUMN_QUANTITY);
                     if (quantity != 0) {
                         String storeName = rs.getString(ObjectEntry.COLUMN_OBJECT);
-                        int size = rs.getInt(SizeEntry.COLUMN_SIZE_NAME);
+                        String size = rs.getString(SizeEntry.COLUMN_SIZE_NAME);
                         product.addStoreStockInfo(storeName, size, quantity);
                     }
                 }

@@ -71,7 +71,7 @@ public class Product {
         this.infoFromSite = infoFromSite;
     }
 
-    public void addStoreStockInfo(String storeName, int size, int count) {
+    public void addStoreStockInfo(String storeName, String size, int count) {
         for (StoreStock store : stores) {
             if (store.getStoreName().equals(storeName)) {
                 store.addSizeCount(size, count);
