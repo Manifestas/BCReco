@@ -93,6 +93,7 @@ public class CameraActivity extends Activity {
                 for (Symbol sym : symbols) {
                     //get recognized code
                     lastScannedCode = sym.getData();
+                    // TODO check checksum here
                     if (lastScannedCode != null) {
                         isBarcodeScanned = true;
                         // Return 1st found QR code value to the calling Activity.
