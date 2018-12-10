@@ -67,9 +67,11 @@ public class ProductInfoFragment extends Fragment {
                 colorTextView.setText(product.getColor());
                 modelDescTextView.setText(product.getModelDesc());
                 seasonTextView.setText(product.getSeason());
-                priceTextView.setText(String.valueOf(product.getPrice()));
+                String price = product.getPrice() + "\u20BD"; // add ruble sign
+                priceTextView.setText(price);
                 if (product.getInfoFromSite() != null) {
-                    maxPriceTextView.setText(product.getInfoFromSite().getMaxPrice());
+                    String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
+                    maxPriceTextView.setText(maxPrice);
                     // make text crossed
                     maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
