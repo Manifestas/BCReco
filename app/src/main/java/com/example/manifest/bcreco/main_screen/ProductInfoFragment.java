@@ -60,16 +60,20 @@ public class ProductInfoFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getProduct().observe(this, product -> {
-            modelTextView.setText(product.getModel());
-            colorTextView.setText(product.getColor());
-            modelDescTextView.setText(product.getModelDesc());
-            seasonTextView.setText(product.getPrice());
-            priceTextView.setText(product.getPrice());
-            maxPriceTextView.setText(product.getInfoFromSite().getMaxPrice());
-            // make text crossed
-            maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        });
+        if (isAdded()) {
+            viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+            viewModel.getProduct().observe(this, product -> {
+                modelTextView.setText(product.getModel());
+                colorTextView.setText(product.getColor());
+                modelDescTextView.setText(product.getModelDesc());
+                seasonTextView.setText(product.getSeason());
+                priceTextView.setText(String.valueOf(product.getPrice()));
+                if (product.getInfoFromSite() != null) {
+                    maxPriceTextView.setText(product.getInfoFromSite().getMaxPrice());
+                    // make text crossed
+                    maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+            });
+        }
     }
 }

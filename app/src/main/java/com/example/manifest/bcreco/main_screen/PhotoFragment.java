@@ -58,12 +58,14 @@ public class PhotoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         int photoNumber = getArguments().getInt(ARG_PHOTO_NUM);
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getProduct().observe(this, product -> {
-            String imageUrl = product.getInfoFromSite().getImageUrls().get(photoNumber);
-            Picasso.get()
-                    .load(imageUrl)
-                    .into(ivPhoto);
-        });
+        if (isAdded()) {
+            MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+            viewModel.getProduct().observe(this, product -> {
+                String imageUrl = product.getInfoFromSite().getImageUrls().get(photoNumber);
+                Picasso.get()
+                        .load(imageUrl)
+                        .into(ivPhoto);
+            });
+        }
     }
 }
