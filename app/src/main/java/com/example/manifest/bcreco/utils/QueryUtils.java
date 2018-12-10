@@ -67,11 +67,6 @@ public class QueryUtils {
                     if (model.getBoolean("IS_SALE_PRICE")) {
                         maxPrice = model.getString("PRICE");
                     }
-//                    int maxPriceInt = model.getInt("PRICE");
-//                    maxPrice = String.valueOf(maxPriceInt);
-                    JSONObject pictureData = model.getJSONObject("PICTURE_DATA");
-                    String firstImage = pictureData.getString("medium2");
-                    imageUrls.add(firstImage);
                     JSONArray extendedImages = model.getJSONArray("ADDITIONAL_IMAGES_EXTENDED");
                     for (int j = 0; j < extendedImages.length(); j++) {
                         JSONObject imageObject = extendedImages.getJSONObject(j);
