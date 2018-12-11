@@ -10,6 +10,7 @@ public class Product {
     private String modelDesc;
     private String season;
     private int price;
+    private String currentStoreName;
     private List<StoreStock> stores = new ArrayList<>();
     private InfoFromSite infoFromSite;
 
@@ -61,6 +62,14 @@ public class Product {
 
     public int getPrice() {
         return price;
+    }
+
+    public String getCurrentStoreName() {
+        return currentStoreName;
+    }
+
+    public void setCurrentStoreName(String currentStoreName) {
+        this.currentStoreName = currentStoreName;
     }
 
     public InfoFromSite getInfoFromSite() {

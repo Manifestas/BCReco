@@ -24,4 +24,10 @@ public class PrefHelper {
                 context.getString(R.string.pref_password_default));
         return new DbConnectionParams(ipPref, portPref, loginPref, passwordPref);
     }
+
+    public static String getCurrentStoreId(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getString(context.getString(R.string.pref_store_id_key),
+                context.getString(R.string.pref_store_id_default));
+    }
 }

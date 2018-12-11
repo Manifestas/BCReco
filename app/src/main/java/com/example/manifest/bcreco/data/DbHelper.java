@@ -116,9 +116,10 @@ public class DbHelper {
      * @param barcode of product.
      * @return A Product with this barcode.
      */
-    public static Product returnProductFromDb(DbConnectionParams params, String barcode) {
+    public static Product returnProductFromDb(DbConnectionParams params, String barcode, String currenStoreId) {
         String pluId = Product.getPluFromBarcode(barcode);
         Product product = null;
+        String currentStoreName = null;
         try {
             if (connection == null) {
                 Log.d(TAG, "Connection == null");
@@ -130,13 +131,22 @@ public class DbHelper {
                     Log.d(TAG, "ResultSet == null");
                     return null;
                 }
+
                 while (rs.next()) {
                     if (product == null) {
                         product = getProductFromResultSet(rs);
                     }
                     int quantity = rs.getInt(LogPluCostEntry.COLUMN_QUANTITY);
                     if (quantity != 0) {
-                        String storeName = rs.getString(ObjectEntry.COLUMN_OBJECT);
+                        String storeName = rs.getString(ObjectEntry.COLUMN_OBJECT_SHORT_DESC);
+                        if (currentStoreName == null) {
+                            String storeId = rs.getString(ObjectEntry.COLUMN_OBJECT);
+                            if (storeId.equals(currenStoreId)) {
+                                currentStoreName = storeName;
+                                product.setCurrentStoreName(storeName);
+                                Log.i(TAG, "Current store name: " + currentStoreName);
+                            }
+                        }
                         String size = rs.getString(SizeEntry.COLUMN_SIZE_NAME);
                         product.addStoreStockInfo(storeName, size, quantity);
                     }

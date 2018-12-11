@@ -18,10 +18,12 @@ public class MainViewModel extends AndroidViewModel {
 
     private final MutableLiveData<Product> product = new MutableLiveData<>();
     private DbConnectionParams connectionParams;
+    private String storeId;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         connectionParams = PrefHelper.getDbConnectionParams(application);
+        storeId = PrefHelper.getCurrentStoreId(application);
     }
 
     public MutableLiveData<Product> getProduct() {
@@ -41,7 +43,7 @@ public class MainViewModel extends AndroidViewModel {
                 if (barcodes.length < 1 || barcodes[0] == null) {
                     return null;
                 }
-                Product product = DbHelper.returnProductFromDb(connectionParams, barcodes[0]);
+                Product product = DbHelper.returnProductFromDb(connectionParams, barcodes[0], storeId);
 
                 if (product != null) {
                     publishProgress(product);
