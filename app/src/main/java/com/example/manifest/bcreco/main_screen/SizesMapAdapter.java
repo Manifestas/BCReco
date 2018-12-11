@@ -22,7 +22,6 @@ public class SizesMapAdapter extends BaseAdapter {
 
     private Context context;
     private Map<String, Boolean> sizesMap = new TreeMap<>();
-    private String[] keys = sizesMap.keySet().toArray(new String[0]);
 
     public SizesMapAdapter(Context context) {
         this.context = context;
@@ -34,8 +33,16 @@ public class SizesMapAdapter extends BaseAdapter {
     }
 
     @Override
-    public Boolean getItem(int position) {
-        return sizesMap.get(keys[position]);
+    public Map.Entry<String, Boolean> getItem(int position) {
+        int size = getCount();
+        int count = 0;
+        for (Map.Entry<String, Boolean> entry : sizesMap.entrySet()) {
+            if (count == position) {
+                return entry;
+            }
+            count++;
+        }
+        return null;
     }
 
     @Override
@@ -45,6 +52,9 @@ public class SizesMapAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (getCount() == 0) {
+            return null;
+        }
         Button sizeButton;
         if (convertView == null) {
             sizeButton = new Button(context);
@@ -56,8 +66,8 @@ public class SizesMapAdapter extends BaseAdapter {
         } else {
             sizeButton = (Button) convertView;
         }
-        sizeButton.setText(keys[position]);
-        if (getItem(position)) {
+        sizeButton.setText(getItem(position).getKey());
+        if (getItem(position).getValue()) {
             // TODO: if background oval disappear - v.getBackground().setColorFilter(Color.parseColor("#00ff00"), PorterDuff.Mode.DARKEN);
             sizeButton.setBackgroundColor(Color.parseColor("#BDBDBD"));
         }
