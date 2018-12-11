@@ -11,9 +11,6 @@ import android.widget.TextView;
 import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +26,7 @@ public class ProductInfoFragment extends Fragment {
     private TextView maxPriceTextView;
     private GridView sizesGridView;
     private MainViewModel viewModel;
+    private SizesMapAdapter sizeAdapter;
 
     public static Fragment newInstance() {
         return new ProductInfoFragment();
@@ -39,6 +37,8 @@ public class ProductInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_info, container, false);
 
+        sizeAdapter = new SizesMapAdapter(getActivity());
+
         modelTextView = v.findViewById(R.id.tv_model);
         colorTextView = v.findViewById(R.id.tv_color);
         modelDescTextView = v.findViewById(R.id.tv_model_desc);
@@ -46,13 +46,7 @@ public class ProductInfoFragment extends Fragment {
         priceTextView = v.findViewById(R.id.tv_price);
         maxPriceTextView = v.findViewById(R.id.tv_max_price);
         sizesGridView = v.findViewById(R.id.gv_sizes);
-        List<String> list = new ArrayList<>();
-        float d = 35;
-        for (int i = 0; i < 10; i++) {
-            d += 0.5;
-            list.add(String.valueOf(d));
-        }
-        sizesGridView.setAdapter(new SizesGridViewAdapter(getActivity(), list));
+        sizesGridView.setAdapter(sizeAdapter);
 
         return v;
     }
@@ -75,6 +69,9 @@ public class ProductInfoFragment extends Fragment {
                     // make text crossed
                     maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
+
+                sizeAdapter.clear();
+                sizeAdapter.addAll(product.getAvailableSizes());
             });
         }
     }

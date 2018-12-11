@@ -11,7 +11,6 @@ import android.widget.GridView;
 
 import com.example.manifest.bcreco.R;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
