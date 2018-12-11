@@ -6,11 +6,14 @@ import com.example.manifest.bcreco.models.StoreStock;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class ProductTest {
+    private Product product = new Product("model", "color", "modelDesc", "season", 10000);
 
     @Test
     public void getPluFromBarcodeSampleBarcode() {
@@ -36,7 +39,6 @@ public class ProductTest {
 
     @Test
     public void addStoreStockInfoAddToEmpty() {
-        Product product = new Product("model", "color", "modelDesc", "season", 10000);
         product.addStoreStockInfo("Unimoll", "39", 1);
         List<StoreStock> stores = product.getStores();
         StoreStock store = new StoreStock("Unimoll");
@@ -46,7 +48,6 @@ public class ProductTest {
 
     @Test
     public void addStoreStockInfoAddSameStoreAnotherSize() {
-        Product product = new Product("model", "color", "modelDesc", "season", 10000);
         product.addStoreStockInfo("Unimoll", "39", 1);
         product.addStoreStockInfo("Unimoll", "40", 1);
         List<StoreStock> stores = product.getStores();
@@ -58,12 +59,55 @@ public class ProductTest {
 
     @Test
     public void addStoreStockInfoAddAnotherStore() {
-        Product product = new Product("model", "color", "modelDesc", "season", 10000);
         product.addStoreStockInfo("Unimoll", "39", 1);
         product.addStoreStockInfo("Inet", "39", 1);
         List<StoreStock> stores = product.getStores();
         StoreStock store = new StoreStock("Inet");
         store.addSizeCount("39", 1);
         assertEquals(stores.get(1), store);
+    }
+
+    @Test
+    public void getAvailableSizesAllSizesInCurrentStore() {
+        product.addStoreStockInfo("Unimoll", "39", 1);
+        product.addStoreStockInfo("Inet", "39", 1);
+        product.addStoreStockInfo("Unimoll", "40", 1);
+        product.addStoreStockInfo("Inet", "40", 1);
+        product.setCurrentStoreName("Unimoll");
+        Map<String, Boolean> expected = new TreeMap<>();
+        expected.put("39", true);
+        expected.put("40", true);
+
+        assertEquals(expected, product.getAvailableSizes());
+    }
+
+    @Test
+    public void getAvailableSizesAllSizesNotInCurrentStore() {
+        product.addStoreStockInfo("Riga", "39", 1);
+        product.addStoreStockInfo("Inet", "39", 1);
+        product.addStoreStockInfo("Riga", "40", 1);
+        product.addStoreStockInfo("Inet", "40", 1);
+        product.setCurrentStoreName("Unimoll");
+        Map<String, Boolean> expected = new TreeMap<>();
+        expected.put("39", false);
+        expected.put("40", false);
+
+        assertEquals(expected, product.getAvailableSizes());
+    }
+
+    @Test
+    public void getAvailableSizesSizesByRotation() {
+        product.addStoreStockInfo("Riga", "38", 1);
+        product.addStoreStockInfo("Unimoll", "39", 1);
+        product.addStoreStockInfo("Riga", "40", 1);
+        product.addStoreStockInfo("Unimoll", "41", 1);
+        product.setCurrentStoreName("Unimoll");
+        Map<String, Boolean> expected = new TreeMap<>();
+        expected.put("38", false);
+        expected.put("39", true);
+        expected.put("40", false);
+        expected.put("41", true);
+
+        assertEquals(expected, product.getAvailableSizes());
     }
 }

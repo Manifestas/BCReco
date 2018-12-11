@@ -3,6 +3,7 @@ package com.example.manifest.bcreco.models;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class StoreStock {
 
@@ -35,5 +36,9 @@ public class StoreStock {
 
     public void addSizeCount(String size, int count) {
         sizesCount.put(size, count);
+    }
+
+    public Set<String> getAllSizes() {
+        return sizesCount.keySet();
     }
 }

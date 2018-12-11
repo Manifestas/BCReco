@@ -2,6 +2,9 @@ package com.example.manifest.bcreco.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class Product {
 
@@ -90,5 +93,28 @@ public class Product {
         StoreStock storeStock = new StoreStock(storeName);
         storeStock.addSizeCount(size, count);
         stores.add(storeStock);
+    }
+
+    public Map<String, Boolean> getAvailableSizes() {
+        Map<String, Boolean> allAvailableSizes = new TreeMap<>();
+        for (StoreStock storeStock : stores) {
+            Set<String> oneStoreSizes = storeStock.getAllSizes();
+            for (String size : oneStoreSizes) {
+                boolean isCurrentStore = storeStock.getStoreName().equals(currentStoreName);
+                if (!allAvailableSizes.containsKey(size)) {
+                    if (isCurrentStore) {
+                        allAvailableSizes.put(size, true);
+                    } else {
+                        allAvailableSizes.put(size, false);
+                    }
+
+                } else {
+                    if (!allAvailableSizes.get(size) && isCurrentStore) {
+                        allAvailableSizes.put(size, true);
+                    }
+                }
+            }
+        }
+        return allAvailableSizes;
     }
 }
