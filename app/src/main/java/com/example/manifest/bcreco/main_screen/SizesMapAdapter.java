@@ -1,7 +1,6 @@
 package com.example.manifest.bcreco.main_screen;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +51,6 @@ public class SizesMapAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (getCount() == 0) {
-            return null;
-        }
         Button sizeButton;
         if (convertView == null) {
             sizeButton = new Button(context);
@@ -62,15 +58,16 @@ public class SizesMapAdapter extends BaseAdapter {
             int rowHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     HEIGHT_BUTTON_IN_DP, context.getResources().getDisplayMetrics());
             sizeButton.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, rowHeight));
-            sizeButton.setBackgroundResource(R.drawable.size_button_bg);
         } else {
             sizeButton = (Button) convertView;
         }
-        sizeButton.setText(getItem(position).getKey());
+        // if its size in current store
         if (getItem(position).getValue()) {
-            // TODO: if background oval disappear - v.getBackground().setColorFilter(Color.parseColor("#00ff00"), PorterDuff.Mode.DARKEN);
-            sizeButton.setBackgroundColor(Color.parseColor("#BDBDBD"));
+            sizeButton.setBackgroundResource(R.drawable.size_button_bg_light_grey);
+        } else {
+            sizeButton.setBackgroundResource(R.drawable.size_button_bg);
         }
+        sizeButton.setText(getItem(position).getKey());
         return sizeButton;
     }
 
