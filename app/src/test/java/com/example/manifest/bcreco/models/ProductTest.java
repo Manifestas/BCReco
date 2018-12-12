@@ -1,7 +1,6 @@
 package com.example.manifest.bcreco.models;
 
-import com.example.manifest.bcreco.models.Product;
-import com.example.manifest.bcreco.models.StoreStock;
+import com.example.manifest.bcreco.utils.BarcodeUtils;
 
 import org.junit.Test;
 
@@ -14,28 +13,6 @@ import static org.junit.Assert.assertNull;
 
 public class ProductTest {
     private Product product = new Product("model", "color", "modelDesc", "season", 10000);
-
-    @Test
-    public void getPluFromBarcodeSampleBarcode() {
-        String expected = "468777";
-        assertEquals(expected, Product.getPluFromBarcode("000004687771"));
-    }
-
-    @Test
-    public void getPluFromBarcodeWithNoZerosBarcode() {
-        String expected = "10000468777";
-        assertEquals(expected, Product.getPluFromBarcode("100004687771"));
-    }
-
-    @Test
-    public void getPluFromBarcodeZerosBarcode() {
-        assertNull(Product.getPluFromBarcode("000000000000"));
-    }
-
-    @Test
-    public void getPluFromBarcodeNullBarcode() {
-        assertNull(Product.getPluFromBarcode(null));
-    }
 
     @Test
     public void addStoreStockInfoAddToEmpty() {

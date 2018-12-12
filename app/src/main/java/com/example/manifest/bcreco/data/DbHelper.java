@@ -11,6 +11,7 @@ import com.example.manifest.bcreco.data.DbContract.PluEntry;
 import com.example.manifest.bcreco.data.DbContract.SeasonEntry;
 import com.example.manifest.bcreco.data.DbContract.SizeEntry;
 import com.example.manifest.bcreco.models.Product;
+import com.example.manifest.bcreco.utils.BarcodeUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -117,7 +118,7 @@ public class DbHelper {
      * @return A Product with this barcode.
      */
     public static Product returnProductFromDb(DbConnectionParams params, String barcode, String currenStoreId) {
-        String pluId = Product.getPluFromBarcode(barcode);
+        String pluId = BarcodeUtils.getPluFromBarcode(barcode);
         Product product = null;
         String currentStoreName = null;
         try {
