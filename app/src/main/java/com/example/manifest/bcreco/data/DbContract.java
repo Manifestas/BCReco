@@ -124,30 +124,6 @@ public final class DbContract {
          * Type: INT
          */
         public static final String COLUMN_ID_PLU = "ID_PLU";
-
-        //TODO: add check sum.
-
-        /**
-         * For fast searching in database, it is necessary that the length
-         * of the barcode string must be 12.
-         *
-         * @param barcode any length string.
-         * @return String barcode with length equal to 12.
-         */
-        public static String getValidBarcode(String barcode) {
-            if (barcode == null || barcode.length() == 0) {
-                return null;
-            }
-            int barcodeLength = barcode.length();
-            if (barcodeLength == 12) {
-                return barcode;
-            } else if (barcodeLength > 12) {
-                return barcode.substring(barcodeLength - 12);
-            } else {
-                return String.format("%0" + (12 - barcodeLength) + "d%s", 0, barcode);
-            }
-        }
-
     }
 
     /**
