@@ -77,6 +77,11 @@ public class Product {
         stores.add(storeStock);
     }
 
+    /**
+     * Returns all available sizes in all stores. If size as key in Map is available in current
+     * store value in Map will be true.
+     * @return Map with Size as key and boolean availability in current store.
+     */
     public Map<String, Boolean> getAvailableSizes() {
         Map<String, Boolean> allAvailableSizes = new TreeMap<>();
         for (StoreStock storeStock : stores) {
@@ -98,5 +103,21 @@ public class Product {
             }
         }
         return allAvailableSizes;
+    }
+
+    /**
+     * Returns the amount of this size in each store.
+     * @param size which quantity will be returned.
+     * @return Map with storeName as key and size quantity as value.
+     */
+    public Map<String, Integer> getSizeQuantityForAllStores(String size) {
+        Map<String, Integer> storesSizeQuantity = new TreeMap<>();
+        for (StoreStock storeStock : stores) {
+            int sizeQuantity = storeStock.getSizeQuantity(size);
+            if (sizeQuantity != 0) {
+                storesSizeQuantity.put(storeStock.getStoreName(), sizeQuantity);
+            }
+        }
+        return storesSizeQuantity;
     }
 }

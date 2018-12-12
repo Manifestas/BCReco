@@ -41,4 +41,13 @@ public class StoreStock {
     public Set<String> getAllSizes() {
         return sizesCount.keySet();
     }
+
+    public int getSizeQuantity(String size) {
+        Integer sizeQuantity = sizesCount.get(size);
+        if (sizeQuantity != null) {
+            return sizeQuantity;
+        } else {
+            return 0;
+        }
+    }
 }

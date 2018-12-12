@@ -101,4 +101,41 @@ public class ProductTest {
 
         assertEquals(expected, product.getAvailableSizes());
     }
+
+    @Test
+    public void getSizeQuantityForAllStoresWith1Quantity() {
+        product.addStoreStockInfo("Riga", "39", 1);
+        product.addStoreStockInfo("Inet", "39", 1);
+        product.addStoreStockInfo("Riga", "40", 1);
+        product.addStoreStockInfo("Inet", "40", 1);
+        product.setCurrentStoreName("Unimoll");
+        Map<String, Integer> expected = new TreeMap<>();
+        expected.put("Inet", 1);
+        expected.put("Riga", 1);
+        assertEquals(expected, product.getSizeQuantityForAllStores("39"));
+    }
+
+    @Test
+    public void getSizeQuantityForAllStoresWith1and2Quantity() {
+        product.addStoreStockInfo("Riga", "39", 1);
+        product.addStoreStockInfo("Inet", "39", 1);
+        product.addStoreStockInfo("Riga", "40", 1);
+        product.addStoreStockInfo("Inet", "40", 2);
+        product.setCurrentStoreName("Unimoll");
+        Map<String, Integer> expected = new TreeMap<>();
+        expected.put("Inet", 2);
+        expected.put("Riga", 1);
+        assertEquals(expected, product.getSizeQuantityForAllStores("40"));
+    }
+
+    @Test
+    public void getSizeQuantityForAllStoresWith0Quantity() {
+        product.addStoreStockInfo("Riga", "39", 1);
+        product.addStoreStockInfo("Inet", "39", 1);
+        product.addStoreStockInfo("Riga", "40", 1);
+        product.addStoreStockInfo("Inet", "40", 2);
+        product.setCurrentStoreName("Unimoll");
+        Map<String, Integer> expected = new TreeMap<>();
+        assertEquals(expected, product.getSizeQuantityForAllStores("41"));
+    }
 }
