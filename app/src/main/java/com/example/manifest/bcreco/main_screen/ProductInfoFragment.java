@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ProductInfoFragment extends Fragment {
 
@@ -27,6 +29,8 @@ public class ProductInfoFragment extends Fragment {
     private GridView sizesGridView;
     private MainViewModel viewModel;
     private SizesMapAdapter sizeAdapter;
+    private RecyclerView sizeQuantityRecyclerView;
+    private SizesQuantityAdapter sizesQuantityAdapter;
 
     public static Fragment newInstance() {
         return new ProductInfoFragment();
@@ -47,6 +51,14 @@ public class ProductInfoFragment extends Fragment {
         maxPriceTextView = v.findViewById(R.id.tv_max_price);
         sizesGridView = v.findViewById(R.id.gv_sizes);
         sizesGridView.setAdapter(sizeAdapter);
+
+        sizeQuantityRecyclerView = v.findViewById(R.id.rv_quantity_in_store);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        sizeQuantityRecyclerView.setLayoutManager(layoutManager);
+        sizeQuantityRecyclerView.setHasFixedSize(true);
+        sizesQuantityAdapter = new SizesQuantityAdapter();
+        sizeQuantityRecyclerView.setAdapter(sizesQuantityAdapter);
+
 
         return v;
     }

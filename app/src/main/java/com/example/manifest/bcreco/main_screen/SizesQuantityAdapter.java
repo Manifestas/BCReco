@@ -14,7 +14,7 @@ import java.util.TreeMap;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SizesAdapter extends RecyclerView.Adapter<SizesAdapter.SizeViewHolder> {
+public class SizesQuantityAdapter extends RecyclerView.Adapter<SizesQuantityAdapter.SizeViewHolder> {
 
     private Map<String, Integer> sizesData = new TreeMap<>();
 
