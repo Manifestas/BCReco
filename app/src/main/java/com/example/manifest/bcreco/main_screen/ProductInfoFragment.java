@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
+import com.example.manifest.bcreco.models.Product;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +43,6 @@ public class ProductInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_info, container, false);
 
-        sizeAdapter = new SizesMapAdapter(getActivity());
 
         modelTextView = v.findViewById(R.id.tv_model);
         colorTextView = v.findViewById(R.id.tv_color);
@@ -50,7 +51,19 @@ public class ProductInfoFragment extends Fragment {
         priceTextView = v.findViewById(R.id.tv_price);
         maxPriceTextView = v.findViewById(R.id.tv_max_price);
         sizesGridView = v.findViewById(R.id.gv_sizes);
+        sizeAdapter = new SizesMapAdapter(getActivity());
         sizesGridView.setAdapter(sizeAdapter);
+        sizesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Product product = viewModel.getProduct().getValue();
+                if (product != null) {
+                    TextView clickedView = (TextView) view;
+                    String clickedSize = clickedView.getText().toString();
+                    sizesQuantityAdapter.setSizesData(product.getSizeQuantityForAllStores(clickedSize));
+                }
+            }
+        });
 
         sizeQuantityRecyclerView = v.findViewById(R.id.rv_quantity_in_store);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
