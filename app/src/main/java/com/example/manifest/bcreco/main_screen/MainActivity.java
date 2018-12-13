@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.manifest.bcreco.MainViewModel;
@@ -20,6 +19,7 @@ import com.example.manifest.bcreco.camera.CameraActivity;
 import com.example.manifest.bcreco.models.InfoFromSite;
 import com.example.manifest.bcreco.models.Product;
 import com.example.manifest.bcreco.settings.SettingsActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         rootLayout = findViewById(R.id.root_layout);
 
-        Button barcodeBtn = findViewById(R.id.barcode_btn);
-        barcodeBtn.setOnClickListener(view -> startReadingBarcode());
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> startReadingBarcode());
 
         FragmentManager fm = getSupportFragmentManager();
         addProductInfoFragment(fm);
