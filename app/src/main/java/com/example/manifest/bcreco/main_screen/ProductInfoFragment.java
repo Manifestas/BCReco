@@ -42,8 +42,27 @@ public class ProductInfoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_info, container, false);
+        initTextViews(v);
+        initSizesGridView();
+        initRecyclerView(v);
 
+        return v;
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (isAdded()) {
+            viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+            viewModel.getProduct().observe(this, product -> {
+                fillProductInfoViews(product);
+                sizeAdapter.clear();
+                sizeAdapter.addAll(product.getAvailableSizes());
+            });
+        }
+    }
+
+    private void initTextViews(View v) {
         modelTextView = v.findViewById(R.id.tv_model);
         colorTextView = v.findViewById(R.id.tv_color);
         modelDescTextView = v.findViewById(R.id.tv_model_desc);
@@ -51,6 +70,9 @@ public class ProductInfoFragment extends Fragment {
         priceTextView = v.findViewById(R.id.tv_price);
         maxPriceTextView = v.findViewById(R.id.tv_max_price);
         sizesGridView = v.findViewById(R.id.gv_sizes);
+    }
+
+    private void initSizesGridView() {
         sizeAdapter = new SizesMapAdapter(getActivity());
         sizesGridView.setAdapter(sizeAdapter);
         sizesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,40 +86,29 @@ public class ProductInfoFragment extends Fragment {
                 }
             }
         });
+    }
 
+    private void initRecyclerView(View v) {
         sizeQuantityRecyclerView = v.findViewById(R.id.rv_quantity_in_store);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         sizeQuantityRecyclerView.setLayoutManager(layoutManager);
         sizeQuantityRecyclerView.setHasFixedSize(true);
         sizesQuantityAdapter = new SizesQuantityAdapter();
         sizeQuantityRecyclerView.setAdapter(sizesQuantityAdapter);
-
-
-        return v;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (isAdded()) {
-            viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-            viewModel.getProduct().observe(this, product -> {
-                modelTextView.setText(product.getModel());
-                colorTextView.setText(product.getColor());
-                modelDescTextView.setText(product.getModelDesc());
-                seasonTextView.setText(product.getSeason());
-                String price = product.getPrice() + "\u20BD"; // add ruble sign
-                priceTextView.setText(price);
-                if (product.getInfoFromSite() != null) {
-                    String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
-                    maxPriceTextView.setText(maxPrice);
-                    // make text crossed
-                    maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-
-                sizeAdapter.clear();
-                sizeAdapter.addAll(product.getAvailableSizes());
-            });
+    private void fillProductInfoViews(Product product) {
+        modelTextView.setText(product.getModel());
+        colorTextView.setText(product.getColor());
+        modelDescTextView.setText(product.getModelDesc());
+        seasonTextView.setText(product.getSeason());
+        String price = product.getPrice() + "\u20BD"; // add ruble sign
+        priceTextView.setText(price);
+        if (product.getInfoFromSite() != null) {
+            String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
+            maxPriceTextView.setText(maxPrice);
+            // make text crossed
+            maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 }
