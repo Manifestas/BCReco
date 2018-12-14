@@ -65,6 +65,8 @@
         android:id="@+id/gv_sizes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:columnWidth="48dp"
         android:horizontalSpacing="4dp"
         android:numColumns="auto_fit"
