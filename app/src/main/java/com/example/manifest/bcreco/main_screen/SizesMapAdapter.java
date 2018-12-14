@@ -1,6 +1,7 @@
 package com.example.manifest.bcreco.main_screen;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -66,10 +67,15 @@ public class SizesMapAdapter extends BaseAdapter {
         // if its size in current store
         if (getItem(position).getValue()) {
             sizeText.setBackgroundResource(R.drawable.size_button_bg_light_grey);
+            // for understanding in the future which background was used
+            sizeText.setTag(R.drawable.size_button_bg_light_grey);
         } else {
             sizeText.setBackgroundResource(R.drawable.size_button_bg);
+            // for understanding in the future which background was used
+            sizeText.setTag(R.drawable.size_button_bg);
         }
         sizeText.setText(getItem(position).getKey());
+        sizeText.setTextColor(Color.BLACK);
         return sizeText;
     }
 

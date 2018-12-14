@@ -1,5 +1,6 @@
 package com.example.manifest.bcreco.main_screen;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +34,9 @@ public class ProductInfoFragment extends Fragment {
     private SizesMapAdapter sizeAdapter;
     private RecyclerView sizeQuantityRecyclerView;
     private SizesQuantityAdapter sizesQuantityAdapter;
+    
+    private int previousSelectedSizePosition = -1;
+    private int previousSelectedSizeBackground = -1;
 
     public static Fragment newInstance() {
         return new ProductInfoFragment();
@@ -84,7 +88,17 @@ public class ProductInfoFragment extends Fragment {
                 if (product != null) {
                     TextView clickedView = (TextView) view;
                     String clickedSize = clickedView.getText().toString();
+                    if (previousSelectedSizePosition != -1) {
+                        TextView previousTextView = (TextView) sizesGridView.getChildAt(previousSelectedSizePosition);
+                        previousTextView.setBackgroundResource(previousSelectedSizeBackground);
+                        previousTextView.setTextColor(Color.BLACK);
+                    }
+                    clickedView.setBackgroundResource(R.drawable.size_button_bg_black);
+                    clickedView.setTextColor(Color.WHITE);
                     sizesQuantityAdapter.setSizesData(product.getSizeQuantityForAllStores(clickedSize));
+                    previousSelectedSizePosition = position;
+                    // in adapter current background color saved as a Tag
+                    previousSelectedSizeBackground = (int) clickedView.getTag();
                 }
             }
         });
