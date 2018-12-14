@@ -33,8 +33,9 @@ public class SizesQuantityAdapter extends RecyclerView.Adapter<SizesQuantityAdap
         for (Map.Entry<String, Integer> entry : sizesData.entrySet()) {
             if (count == position) {
                 holder.storeNameTextView.setText(entry.getKey());
-                holder.sizeQuantityTextView.setText(entry.getValue());
+                holder.sizeQuantityTextView.setText(String.valueOf(entry.getValue()));
             }
+            count++;
         }
     }
 
