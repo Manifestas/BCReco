@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
+import com.example.manifest.bcreco.models.InfoFromSite;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
@@ -61,10 +62,13 @@ public class PhotoFragment extends Fragment {
         if (isAdded()) {
             MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
             viewModel.getProduct().observe(this, product -> {
-                String imageUrl = product.getInfoFromSite().getImageUrls().get(photoNumber);
-                Picasso.get()
-                        .load(imageUrl)
-                        .into(ivPhoto);
+                InfoFromSite infoFromSite = product.getInfoFromSite();
+                if (infoFromSite != null) {
+                    String imageUrl = infoFromSite.getImageUrls().get(photoNumber);
+                    Picasso.get()
+                            .load(imageUrl)
+                            .into(ivPhoto);
+                }
             });
         }
     }

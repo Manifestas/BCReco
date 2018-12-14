@@ -55,9 +55,11 @@ public class ProductInfoFragment extends Fragment {
         if (isAdded()) {
             viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
             viewModel.getProduct().observe(this, product -> {
-                fillProductInfoViews(product);
-                sizeAdapter.clear();
-                sizeAdapter.addAll(product.getAvailableSizes());
+                if (product != null) {
+                    fillProductInfoViews(product);
+                    sizeAdapter.clear();
+                    sizeAdapter.addAll(product.getAvailableSizes());
+                }
             });
         }
     }
@@ -98,17 +100,19 @@ public class ProductInfoFragment extends Fragment {
     }
 
     private void fillProductInfoViews(Product product) {
-        modelTextView.setText(product.getModel());
-        colorTextView.setText(product.getColor());
-        modelDescTextView.setText(product.getModelDesc());
-        seasonTextView.setText(product.getSeason());
-        String price = product.getPrice() + "\u20BD"; // add ruble sign
-        priceTextView.setText(price);
-        if (product.getInfoFromSite() != null) {
-            String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
-            maxPriceTextView.setText(maxPrice);
-            // make text crossed
-            maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        if (product != null) {
+            modelTextView.setText(product.getModel());
+            colorTextView.setText(product.getColor());
+            modelDescTextView.setText(product.getModelDesc());
+            seasonTextView.setText(product.getSeason());
+            String price = product.getPrice() + "\u20BD"; // add ruble sign
+            priceTextView.setText(price);
+            if (product.getInfoFromSite() != null) {
+                String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
+                maxPriceTextView.setText(maxPrice);
+                // make text crossed
+                maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }
         }
     }
 }
