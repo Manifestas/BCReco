@@ -62,8 +62,8 @@ public class PhotoFragment extends Fragment {
         if (isAdded()) {
             MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
             viewModel.getProduct().observe(this, product -> {
-                InfoFromSite infoFromSite = product.getInfoFromSite();
-                if (infoFromSite != null) {
+                if (product != null && product.getInfoFromSite() != null) {
+                    InfoFromSite infoFromSite = product.getInfoFromSite();
                     String imageUrl = infoFromSite.getImageUrls().get(photoNumber);
                     Picasso.get()
                             .load(imageUrl)
