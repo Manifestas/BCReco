@@ -5,8 +5,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.example.manifest.bcreco.R;
 
@@ -51,24 +51,24 @@ public class SizesMapAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Button sizeButton;
+        TextView sizeText;
         if (convertView == null) {
-            sizeButton = new Button(context);
+            sizeText = new TextView(context);
             // convert dp to pixels
             int rowHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     HEIGHT_BUTTON_IN_DP, context.getResources().getDisplayMetrics());
-            sizeButton.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, rowHeight));
+            sizeText.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, rowHeight));
         } else {
-            sizeButton = (Button) convertView;
+            sizeText = (TextView) convertView;
         }
         // if its size in current store
         if (getItem(position).getValue()) {
-            sizeButton.setBackgroundResource(R.drawable.size_button_bg_light_grey);
+            sizeText.setBackgroundResource(R.drawable.size_button_bg_light_grey);
         } else {
-            sizeButton.setBackgroundResource(R.drawable.size_button_bg);
+            sizeText.setBackgroundResource(R.drawable.size_button_bg);
         }
-        sizeButton.setText(getItem(position).getKey());
-        return sizeButton;
+        sizeText.setText(getItem(position).getKey());
+        return sizeText;
     }
 
     public void addAll(@NonNull Map<String, Boolean> map) {
