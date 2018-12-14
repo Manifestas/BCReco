@@ -2,6 +2,7 @@ package com.example.manifest.bcreco.main_screen;
 
 import android.content.Context;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -58,6 +59,7 @@ public class SizesMapAdapter extends BaseAdapter {
             int rowHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     HEIGHT_BUTTON_IN_DP, context.getResources().getDisplayMetrics());
             sizeText.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, rowHeight));
+            sizeText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         } else {
             sizeText = (TextView) convertView;
         }
