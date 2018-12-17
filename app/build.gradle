@@ -9,7 +9,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -27,12 +27,17 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.preference:preference:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation "androidx.test.ext:junit:1.1.0"
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.1'
+
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation files('src/libs/iconv.jar')
     implementation files('src/libs/zbar.jar')
