@@ -52,10 +52,62 @@ public class PreferenceValidatorTest {
     }
 
     @Test
-    public void isPortValid() {
+    public void isPortValidNotNumber() {
+        assertFalse(PreferenceValidator.isPortValid("zero"));
     }
 
     @Test
-    public void isStoreIdValid() {
+    public void isPortValidEmpty() {
+        assertFalse(PreferenceValidator.isPortValid(""));
+    }
+
+    @Test
+    public void isPortValidZero() {
+        assertFalse(PreferenceValidator.isPortValid("0"));
+    }
+
+    @Test
+    public void isPortValidNegative() {
+        assertFalse(PreferenceValidator.isPortValid("-100"));
+    }
+
+    @Test
+    public void isPortValidTooBig() {
+        assertFalse(PreferenceValidator.isPortValid("65536"));
+    }
+
+    @Test
+    public void isPortValidValidNumber() {
+        assertTrue(PreferenceValidator.isPortValid("8080"));
+    }
+
+    @Test
+    public void isStoreIdValidNotNumber() {
+        assertFalse(PreferenceValidator.isStoreIdValid("zero"));
+    }
+
+    @Test
+    public void isStoreIdValidEmpty() {
+        assertFalse(PreferenceValidator.isStoreIdValid(""));
+    }
+
+    @Test
+    public void isStoreIdValidZero() {
+        assertTrue(PreferenceValidator.isStoreIdValid("0"));
+    }
+
+    @Test
+    public void isStoreIdValidNegative() {
+        assertFalse(PreferenceValidator.isStoreIdValid("-100"));
+    }
+
+    @Test
+    public void isStoreIdValidTooBig() {
+        assertFalse(PreferenceValidator.isStoreIdValid("100000"));
+    }
+
+    @Test
+    public void isStoreIdValidValidNumber() {
+        assertTrue(PreferenceValidator.isStoreIdValid("119"));
     }
 }
