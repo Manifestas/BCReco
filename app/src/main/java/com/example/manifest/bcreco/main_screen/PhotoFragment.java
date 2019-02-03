@@ -61,15 +61,15 @@ public class PhotoFragment extends Fragment {
         int photoNumber = getArguments().getInt(ARG_PHOTO_NUM);
         if (isAdded()) {
             MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-            viewModel.getProduct().observe(this, product -> {
-                if (product != null && product.getInfoFromSite() != null) {
-                    InfoFromSite infoFromSite = product.getInfoFromSite();
-                    String imageUrl = infoFromSite.getImageUrls().get(photoNumber);
-                    Picasso.get()
-                            .load(imageUrl)
-                            .into(ivPhoto);
-                }
-            });
+//            viewModel.getProduct().observe(this, product -> {
+//                if (product != null && product.getInfoFromSite() != null) {
+//                    InfoFromSite infoFromSite = product.getInfoFromSite();
+//                    String imageUrl = infoFromSite.getImageUrls().get(photoNumber);
+//                    Picasso.get()
+//                            .load(imageUrl)
+//                            .into(ivPhoto);
+//                }
+//            });
         }
     }
 }
