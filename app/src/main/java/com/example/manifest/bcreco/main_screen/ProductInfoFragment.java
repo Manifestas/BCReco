@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
+import com.example.manifest.bcreco.databinding.FragmentInfoBinding;
 import com.example.manifest.bcreco.models.Product;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ public class ProductInfoFragment extends Fragment {
     
     private int previousSelectedSizePosition = -1;
     private int previousSelectedSizeBackground = -1;
+    private FragmentInfoBinding binding;
 
     public static Fragment newInstance() {
         return new ProductInfoFragment();
@@ -45,7 +47,8 @@ public class ProductInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_info, container, false);
+        binding = FragmentInfoBinding.inflate(inflater, container, false);
+        View v = binding.getRoot();
         initTextViews(v);
         initSizesGridView();
         initRecyclerView(v);
@@ -58,6 +61,7 @@ public class ProductInfoFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (isAdded()) {
             viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+            binding.setViewmodel(viewModel);
             viewModel.getProduct().observe(this, product -> {
                 if (product != null) {
                     fillProductInfoViews(product);
@@ -121,12 +125,12 @@ public class ProductInfoFragment extends Fragment {
             seasonTextView.setText(product.getSeason());
             String price = product.getPrice() + "\u20BD"; // add ruble sign
             priceTextView.setText(price);
-            if (product.getInfoFromSite() != null) {
-                String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
-                maxPriceTextView.setText(maxPrice);
-                // make text crossed
-                maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            }
+//            if (product.getInfoFromSite() != null) {
+//                String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
+//                maxPriceTextView.setText(maxPrice);
+//                // make text crossed
+//                maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//            }
         }
     }
 }
