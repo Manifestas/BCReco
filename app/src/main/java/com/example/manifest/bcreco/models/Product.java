@@ -15,7 +15,6 @@ public class Product {
     private int price;
     private String currentStoreName;
     private List<StoreStock> stores = new ArrayList<>();
-    private InfoFromSite infoFromSite;
 
     public Product(String model, String color, String modelDesc, String season, int price) {
         this.model = model;
@@ -55,14 +54,6 @@ public class Product {
 
     public void setCurrentStoreName(String currentStoreName) {
         this.currentStoreName = currentStoreName;
-    }
-
-    public InfoFromSite getInfoFromSite() {
-        return infoFromSite;
-    }
-
-    public void setInfoFromSite(InfoFromSite infoFromSite) {
-        this.infoFromSite = infoFromSite;
     }
 
     public void addStoreStockInfo(String storeName, String size, int count) {

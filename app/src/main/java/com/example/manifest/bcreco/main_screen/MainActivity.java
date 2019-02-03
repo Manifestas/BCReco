@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             public int getCount() {
                 Product product = viewModel.getProduct().getValue();
                 if (product != null) {
-                    InfoFromSite info = product.getInfoFromSite();
+                    InfoFromSite info = viewModel.getInfoFromSite().getValue();
                     if (info != null) {
                         return info.getImageUrls().size();
                     }
