@@ -65,9 +65,7 @@ public class MainActivity extends AppCompatActivity {
         addProductInfoFragment(fm);
         initPhotoViewPager(fm);
 
-        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mainViewModel.getProduct().observe(this, product -> {
-
+        viewModel.getProduct().observe(this, product -> {
             PagerAdapter adapter = photoViewPager.getAdapter();
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
