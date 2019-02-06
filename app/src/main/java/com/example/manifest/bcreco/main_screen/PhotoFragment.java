@@ -75,16 +75,7 @@ public class PhotoFragment extends Fragment {
         if (isAdded()) {
             MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
             binding.setViewmodel(viewModel);
-
-//            viewModel.getProduct().observe(this, product -> {
-//                if (product != null && product.getInfoFromSite() != null) {
-//                    InfoFromSite infoFromSite = product.getInfoFromSite();
-//                    String imageUrl = infoFromSite.getImageUrls().get(photoNumber);
-//                    Picasso.get()
-//                            .load(imageUrl)
-//                            .into(ivPhoto);
-//                }
-//            });
+            binding.setLifecycleOwner(this);
         }
     }
 }
