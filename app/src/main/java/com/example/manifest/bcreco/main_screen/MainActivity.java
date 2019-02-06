@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> startReadingBarcode());
 
-        FragmentManager fm = getSupportFragmentManager();
-        addProductInfoFragment(fm);
-        initPhotoViewPager(fm);
+        addProductInfoFragment();
 
         viewModel.getInfoFromSite().observe(this, info -> {
             PagerAdapter adapter = photoViewPager.getAdapter();
@@ -81,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
                 viewModel.init(barcodeString);
+                initPhotoViewPager();
             }
         } else if (requestCode == GET_PERMISSION_REQUEST_CODE) {
             Log.i(TAG, "Coming back from permission settings");
@@ -190,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(appSettingsIntent, GET_PERMISSION_REQUEST_CODE);
     }
 
-    private void addProductInfoFragment(FragmentManager fm) {
+    private void addProductInfoFragment() {
+        FragmentManager fm = getSupportFragmentManager();
         Fragment fragmentInfo = fm.findFragmentById(R.id.fragment_info_container);
         if (fragmentInfo == null) {
             fragmentInfo = ProductInfoFragment.newInstance();
@@ -200,9 +200,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initPhotoViewPager(FragmentManager fm) {
+    private void initPhotoViewPager() {
         photoViewPager = findViewById(R.id.photo_viewpager);
-        photoViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+        photoViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return PhotoFragment.newInstance(position);
