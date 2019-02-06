@@ -17,7 +17,6 @@ import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
 import com.example.manifest.bcreco.camera.CameraActivity;
 import com.example.manifest.bcreco.models.InfoFromSite;
-import com.example.manifest.bcreco.models.Product;
 import com.example.manifest.bcreco.settings.SettingsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         addProductInfoFragment(fm);
         initPhotoViewPager(fm);
 
-        viewModel.getProduct().observe(this, product -> {
+        viewModel.getInfoFromSite().observe(this, info -> {
             PagerAdapter adapter = photoViewPager.getAdapter();
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
@@ -211,12 +210,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                Product product = viewModel.getProduct().getValue();
-                if (product != null) {
-                    InfoFromSite info = viewModel.getInfoFromSite().getValue();
-                    if (info != null) {
-                        return info.getImageUrls().size();
-                    }
+                InfoFromSite info = viewModel.getInfoFromSite().getValue();
+                if (info != null) {
+                    return info.getImageUrls().size();
                 }
                 return 0;
             }
