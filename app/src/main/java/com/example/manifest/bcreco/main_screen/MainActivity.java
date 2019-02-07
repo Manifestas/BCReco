@@ -17,7 +17,6 @@ import com.example.manifest.bcreco.MainViewModel;
 import com.example.manifest.bcreco.R;
 import com.example.manifest.bcreco.camera.CameraActivity;
 import com.example.manifest.bcreco.models.InfoFromSite;
-import com.example.manifest.bcreco.models.Product;
 import com.example.manifest.bcreco.settings.SettingsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -61,11 +60,9 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> startReadingBarcode());
 
-        FragmentManager fm = getSupportFragmentManager();
-        addProductInfoFragment(fm);
-        initPhotoViewPager(fm);
+        addProductInfoFragment();
 
-        viewModel.getProduct().observe(this, product -> {
+        viewModel.getInfoFromSite().observe(this, info -> {
             PagerAdapter adapter = photoViewPager.getAdapter();
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
@@ -82,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
                 viewModel.init(barcodeString);
+                initPhotoViewPager();
             }
         } else if (requestCode == GET_PERMISSION_REQUEST_CODE) {
             Log.i(TAG, "Coming back from permission settings");
@@ -191,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(appSettingsIntent, GET_PERMISSION_REQUEST_CODE);
     }
 
-    private void addProductInfoFragment(FragmentManager fm) {
+    private void addProductInfoFragment() {
+        FragmentManager fm = getSupportFragmentManager();
         Fragment fragmentInfo = fm.findFragmentById(R.id.fragment_info_container);
         if (fragmentInfo == null) {
             fragmentInfo = ProductInfoFragment.newInstance();
@@ -201,9 +200,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initPhotoViewPager(FragmentManager fm) {
+    private void initPhotoViewPager() {
         photoViewPager = findViewById(R.id.photo_viewpager);
-        photoViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+        photoViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return PhotoFragment.newInstance(position);
@@ -211,12 +210,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                Product product = viewModel.getProduct().getValue();
-                if (product != null) {
-                    InfoFromSite info = viewModel.getInfoFromSite().getValue();
-                    if (info != null) {
-                        return info.getImageUrls().size();
-                    }
+                InfoFromSite info = viewModel.getInfoFromSite().getValue();
+                if (info != null) {
+                    return info.getImageUrls().size();
                 }
                 return 0;
             }

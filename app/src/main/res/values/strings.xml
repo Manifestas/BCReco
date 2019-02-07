@@ -3,6 +3,8 @@
     <string name="barcode">Barcode</string>
     <string name="action_settings">Settings</string>
 
+    <string name="add_ruble_sign">%s ₽</string>
+
     <!--  Preference -->
     <string name="pref_ip_label">IP address</string>
     <string name="pref_ip_key" translatable="false">ip_address</string>

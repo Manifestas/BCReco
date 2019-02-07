@@ -1,7 +1,6 @@
 package com.example.manifest.bcreco.main_screen;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ProductInfoFragment extends Fragment {
 
-    private TextView modelTextView;
-    private TextView colorTextView;
-    private TextView modelDescTextView;
-    private TextView seasonTextView;
-    private TextView priceTextView;
-    private TextView maxPriceTextView;
     private GridView sizesGridView;
     private MainViewModel viewModel;
     private SizesMapAdapter sizeAdapter;
     private RecyclerView sizeQuantityRecyclerView;
     private SizesQuantityAdapter sizesQuantityAdapter;
-    
+
     private int previousSelectedSizePosition = -1;
     private int previousSelectedSizeBackground = -1;
     private FragmentInfoBinding binding;
@@ -48,9 +41,9 @@ public class ProductInfoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentInfoBinding.inflate(inflater, container, false);
+        binding.setLifecycleOwner(this);
         View v = binding.getRoot();
-        initTextViews(v);
-        initSizesGridView();
+        initSizesGridView(v);
         initRecyclerView(v);
 
         return v;
@@ -64,7 +57,6 @@ public class ProductInfoFragment extends Fragment {
             binding.setViewmodel(viewModel);
             viewModel.getProduct().observe(this, product -> {
                 if (product != null) {
-                    fillProductInfoViews(product);
                     sizeAdapter.clear();
                     sizeAdapter.addAll(product.getAvailableSizes());
                 }
@@ -72,18 +64,9 @@ public class ProductInfoFragment extends Fragment {
         }
     }
 
-    private void initTextViews(View v) {
-        modelTextView = v.findViewById(R.id.tv_model);
-        colorTextView = v.findViewById(R.id.tv_color);
-        modelDescTextView = v.findViewById(R.id.tv_model_desc);
-        seasonTextView = v.findViewById(R.id.tv_season);
-        priceTextView = v.findViewById(R.id.tv_price);
-        maxPriceTextView = v.findViewById(R.id.tv_max_price);
-        sizesGridView = v.findViewById(R.id.gv_sizes);
-    }
-
-    private void initSizesGridView() {
+    private void initSizesGridView(View v) {
         sizeAdapter = new SizesMapAdapter(getActivity());
+        sizesGridView = v.findViewById(R.id.gv_sizes);
         sizesGridView.setAdapter(sizeAdapter);
         sizesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,22 +98,5 @@ public class ProductInfoFragment extends Fragment {
         sizeQuantityRecyclerView.setHasFixedSize(true);
         sizesQuantityAdapter = new SizesQuantityAdapter();
         sizeQuantityRecyclerView.setAdapter(sizesQuantityAdapter);
-    }
-
-    private void fillProductInfoViews(Product product) {
-        if (product != null) {
-            modelTextView.setText(product.getModel());
-            colorTextView.setText(product.getColor());
-            modelDescTextView.setText(product.getModelDesc());
-            seasonTextView.setText(product.getSeason());
-            String price = product.getPrice() + "\u20BD"; // add ruble sign
-            priceTextView.setText(price);
-//            if (product.getInfoFromSite() != null) {
-//                String maxPrice = product.getInfoFromSite().getMaxPrice() + "\u20BD"; //add ruble sign
-//                maxPriceTextView.setText(maxPrice);
-//                // make text crossed
-//                maxPriceTextView.setPaintFlags(maxPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-//            }
-        }
     }
 }
