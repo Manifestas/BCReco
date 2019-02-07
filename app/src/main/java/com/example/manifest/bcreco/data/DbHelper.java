@@ -98,8 +98,9 @@ public class DbHelper {
 
         // get int rounded price in rubles
         int rubPrice = Math.round(currencyPrice * exchangeRate);
+        String stringPrice = String.valueOf(rubPrice);
 
-        Product product = new Product(model, color, modelDesc, season, rubPrice);
+        Product product = new Product(model, color, modelDesc, season, stringPrice);
 
         Log.d(TAG, "Getting a Product from ResultSet: " + product);
 

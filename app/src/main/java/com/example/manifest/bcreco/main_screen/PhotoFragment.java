@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.manifest.bcreco.MainViewModel;
-import com.example.manifest.bcreco.R;
-import com.example.manifest.bcreco.models.InfoFromSite;
+import com.example.manifest.bcreco.databinding.FragmentPhotoBinding;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -26,7 +28,9 @@ public class PhotoFragment extends Fragment {
 
     private static final String ARG_PHOTO_NUM = "photo_num";
 
-    private ImageView ivPhoto;
+    private static int photoIndex;
+
+    private FragmentPhotoBinding binding;
 
     public PhotoFragment() {
         // Required empty public constructor
@@ -47,29 +51,31 @@ public class PhotoFragment extends Fragment {
         return fragment;
     }
 
+    @BindingAdapter("imageUrl")
+    public static void loadImage(ImageView imageView, List<String> imageUrls) {
+        Picasso.get()
+                .load(imageUrls.get(photoIndex))
+                .into(imageView);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_photo, container, false);
-        ivPhoto = v.findViewById(R.id.iv_photo);
-        return v;
+        binding = FragmentPhotoBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int photoNumber = getArguments().getInt(ARG_PHOTO_NUM);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            photoIndex = arguments.getInt(ARG_PHOTO_NUM);
+        }
+
         if (isAdded()) {
             MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-            viewModel.getProduct().observe(this, product -> {
-                if (product != null && product.getInfoFromSite() != null) {
-                    InfoFromSite infoFromSite = product.getInfoFromSite();
-                    String imageUrl = infoFromSite.getImageUrls().get(photoNumber);
-                    Picasso.get()
-                            .load(imageUrl)
-                            .into(ivPhoto);
-                }
-            });
+            binding.setViewmodel(viewModel);
+            binding.setLifecycleOwner(this);
         }
     }
 }

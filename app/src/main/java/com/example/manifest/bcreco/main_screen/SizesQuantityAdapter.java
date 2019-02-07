@@ -2,11 +2,9 @@ package com.example.manifest.bcreco.main_screen;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.manifest.bcreco.R;
+import com.example.manifest.bcreco.databinding.SizeListItemBinding;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,8 +21,8 @@ public class SizesQuantityAdapter extends RecyclerView.Adapter<SizesQuantityAdap
     public SizeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.size_list_item, parent, false);
-        return new SizeViewHolder(view);
+        SizeListItemBinding binding = SizeListItemBinding.inflate(inflater, parent, false);
+        return new SizeViewHolder(binding);
     }
 
     @Override
@@ -32,8 +30,7 @@ public class SizesQuantityAdapter extends RecyclerView.Adapter<SizesQuantityAdap
         int count = 0;
         for (Map.Entry<String, Integer> entry : sizesData.entrySet()) {
             if (count == position) {
-                holder.storeNameTextView.setText(entry.getKey());
-                holder.sizeQuantityTextView.setText(String.valueOf(entry.getValue()));
+                holder.bind(entry);
             }
             count++;
         }
@@ -50,15 +47,19 @@ public class SizesQuantityAdapter extends RecyclerView.Adapter<SizesQuantityAdap
         notifyDataSetChanged();
     }
 
-    public class SizeViewHolder extends RecyclerView.ViewHolder {
 
-        TextView storeNameTextView;
-        TextView sizeQuantityTextView;
+    class SizeViewHolder extends RecyclerView.ViewHolder {
 
-        public SizeViewHolder(@NonNull View itemView) {
-            super(itemView);
-            storeNameTextView = itemView.findViewById(R.id.tv_list_item_store_name);
-            sizeQuantityTextView = itemView.findViewById(R.id.tv_list_item_size_quantity);
+        private SizeListItemBinding binding;
+
+        SizeViewHolder(SizeListItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bind(Map.Entry<String, Integer> sizeQuantity) {
+            binding.setEntry(sizeQuantity);
+            binding.executePendingBindings();
         }
     }
 

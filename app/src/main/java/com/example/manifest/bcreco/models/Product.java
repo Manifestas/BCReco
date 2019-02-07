@@ -12,11 +12,11 @@ public class Product {
     private String color;
     private String modelDesc;
     private String season;
-    private int price;
+    private String price;
     private String currentStoreName;
     private List<StoreStock> stores = new ArrayList<>();
 
-    public Product(String model, String color, String modelDesc, String season, int price) {
+    public Product(String model, String color, String modelDesc, String season, String price) {
         this.model = model;
         this.color = color;
         this.modelDesc = modelDesc;
@@ -44,7 +44,7 @@ public class Product {
         return season;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
