@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import static org.junit.Assert.assertEquals;
 
 public class ProductTest {
-    private Product product = new Product("model", "color", "modelDesc", "season", 10000);
+    private Product product = new Product("model", "color", "modelDesc", "season", "10000");
 
     @Test
     public void addStoreStockInfoAddToEmpty() {
