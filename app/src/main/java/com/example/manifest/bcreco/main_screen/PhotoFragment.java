@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.manifest.bcreco.MainViewModel;
+import com.example.manifest.bcreco.R;
 import com.example.manifest.bcreco.databinding.FragmentPhotoBinding;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +56,8 @@ public class PhotoFragment extends Fragment {
     public static void loadImage(ImageView imageView, List<String> imageUrls) {
         Picasso.get()
                 .load(imageUrls.get(photoIndex))
+                .error(R.drawable.ic_error)
+                .placeholder(R.drawable.pb_photo_anim)
                 .into(imageView);
     }
 

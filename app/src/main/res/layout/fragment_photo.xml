@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.example.manifest.bcreco.MainViewModel" />
@@ -11,9 +12,8 @@
     <ImageView
         android:id="@+id/iv_photo"
         android:layout_width="match_parent"
-        app:imageUrl="@{viewmodel.infoFromSite.imageUrls}"
-        android:layout_height="match_parent">
-    </ImageView>
+        android:layout_height="match_parent"
+        app:imageUrl="@{viewmodel.infoFromSite.imageUrls}" />
 
 </layout>
 
