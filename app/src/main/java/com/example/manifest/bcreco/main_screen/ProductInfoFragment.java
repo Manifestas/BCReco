@@ -59,6 +59,7 @@ public class ProductInfoFragment extends Fragment {
                 if (product != null) {
                     sizeAdapter.clear();
                     sizeAdapter.addAll(product.getAvailableSizes());
+                    sizesQuantityAdapter.clear();
                 }
             });
         }

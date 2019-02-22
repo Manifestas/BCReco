@@ -47,6 +47,10 @@ public class SizesQuantityAdapter extends RecyclerView.Adapter<SizesQuantityAdap
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        sizesData.clear();
+        notifyDataSetChanged();
+    }
 
     class SizeViewHolder extends RecyclerView.ViewHolder {
 
