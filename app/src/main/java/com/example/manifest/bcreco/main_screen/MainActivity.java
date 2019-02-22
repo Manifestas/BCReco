@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         addProductInfoFragment();
 
+        initPhotoViewPager();
         viewModel.getInfoFromSite().observe(this, info -> {
             PagerAdapter adapter = photoViewPager.getAdapter();
             if (adapter != null) {
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 // Get barcode from intent
                 String barcodeString = data.getStringExtra(CameraActivity.EXTRA_BCVALUE);
                 viewModel.init(barcodeString);
-                initPhotoViewPager();
             }
         } else if (requestCode == GET_PERMISSION_REQUEST_CODE) {
             Log.i(TAG, "Coming back from permission settings");
